@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Dialog</string>
+    <string name="main_Camera">相机</string>
+    <string name="main_Player">播放器</string>
+    <string name="main_Map">地图</string>
+    <string name="main_Study">学习</string>
+</resources>

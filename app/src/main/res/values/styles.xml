@@ -1,0 +1,67 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorControlActivated">#0A8DE7</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Slide.trans" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:windowAnimationStyle">@style/Slide.anim</item>-->
+        <!--<item name="android:backgroundDimEnabled">true</item>--><!--背景是否模糊显示-->
+    </style>
+
+    <!--dialogfragment风格调整-->
+    <!--<style name="Base_AlertDialog" parent="Base.Theme.AppCompat.Light.Dialog">-->
+    <!--不设置在6.0以上会出现，宽度不充满屏幕的情况-->
+    <!--<item name="windowMinWidthMinor">90%</item>-->
+    <!-- 取消标题栏，如果在代码中settitle的话会无效 -->
+    <!--<item name="android:windowNoTitle">true</item>-->
+    <!-- 标题的和Message的文字颜色 -->
+    <!--<item name="android:textColorPrimary">@color/black</item>-->
+    <!-- 修改顶部标题背景颜色，具体颜色自己定，可以是图片 -->
+    <!--<item name="android:topDark">@color/app_main_color_deep</item>-->
+    <!--<item name="android:background">@color/white</item>-->
+    <!-- 在某些系统上面设置背景颜色之后出现奇怪的背景，处这里设置背景为透明，为了隐藏边框 -->
+    <!--<item name="android:windowBackground">@android:color/transparent</item>-->
+    <!--<item name="android:windowFrame">@null</item>-->
+    <!-- 进入和退出动画，左进右出（系统自带） -->
+    <!--<item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>-->
+    <!-- 按钮字体颜色,全部一起改，单个改需要在Java代码中修改 -->
+    <!--<item name="colorAccent">@color/app_main_color</item>-->
+    <!--</style>-->
+    <!--密码输入layout-->
+    <declare-styleable name="PassWordLayoutStyle">
+        <attr name="box_input_color" format="reference" />//输入框输入状态颜色
+        <attr name="box_no_input_color" format="reference" />//输入框未输入状态颜色
+        <attr name="input_line_color" format="reference" />//输入线颜色
+        <attr name="text_input_color" format="reference" />//文本颜色
+        <attr name="interval_width" format="dimension" />//间隔
+        <attr name="item_width" format="dimension" />//子View宽
+        <attr name="item_height" format="dimension" />//子View高
+        <attr name="draw_txt_size" format="dimension" />//文本大小
+        <attr name="draw_box_line_size" format="dimension" />//输入线条大小
+        <attr name="is_show_input_line" format="boolean" />//是否显示输入线
+        <attr name="pass_inputed_type">//密码输入显示内容
+            <flag name="circle" value="0" />
+            <flag name="stars" value="1" />
+            <flag name="text" value="2" />
+        </attr>
+        <attr name="box_draw_type">//密码框形状
+            <flag name="rect" value="0" />
+            <flag name="circle" value="1" />
+            <flag name="line" value="2" />
+        </attr>
+        <attr name="pass_leng">//密码长度 只考虑4 6 8
+            <flag name="four" value="4" />
+            <flag name="six" value="6" />
+            <flag name="eight" value="8" />
+        </attr>
+    </declare-styleable>
+</resources>

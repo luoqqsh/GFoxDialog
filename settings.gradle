@@ -1,0 +1,20 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven {
+            credentials {
+                username '605be56ae1a7ccc7ccb666b9'
+                password 'QI=MtS_7xN]J'
+            }
+            url 'https://packages.aliyun.com/maven/repository/2075122-release-VFlMuN/'
+        }
+    }
+}
+
+rootProject.name = "GFoxDialog"
+include ':app'
+include ':gfox'
+include ':gfox-glide'

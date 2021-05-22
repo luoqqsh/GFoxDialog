@@ -1,0 +1,29 @@
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: 'https://packages.aliyun.com/maven/repository/2075122-release-VFlMuN/') {
+                authentication(
+                        userName: '601f553af3636bc5171cdebb',
+                        password: 'G0c]LL4fyeTC'
+                )
+            }
+            pom.version = '1.2.76'
+            pom.artifactId = 'dialog'
+            pom.groupId = 'com.github'
+        }
+    }
+}
+
+//使用，需要添加
+//maven {
+//    credentials {
+//        username '605be56ae1a7ccc7ccb666b9'
+//        password 'QI=MtS_7xN]J'
+//    }
+//    url 'https://packages.aliyun.com/maven/repository/2075122-release-VFlMuN/'
+//}
+//maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+
+//依赖 implementation 'com.github:dialog:1.2.75'

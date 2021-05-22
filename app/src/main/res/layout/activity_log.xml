@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:overScrollMode="never"
+    android:padding="16dp"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/print_normal_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Normal Message"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/print_normal_object"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Normal Object"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/print_bundle_object"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Bundle Object"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/print_collection_object"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Collection Object"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/print_intent_object"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Intent Object"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/print_map_object"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Map Object"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/print_reference_object"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Reference Object"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/print_throwable_object"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Throwable Object"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/print_json_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Json Message"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/print_xml_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Print Xml Message"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</ScrollView>

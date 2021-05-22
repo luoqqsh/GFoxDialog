@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.xing.gfox.view.CircleProgressBar
+            android:id="@+id/cProgressBar"
+            android:layout_width="@dimen/dp80"
+            android:layout_height="@dimen/dp80"
+            app:progress_background_color="@color/white"
+            app:progress_end_color="@color/red"
+            app:progress_start_color="@color/red"
+            app:progress_stroke_width="@dimen/dp3"
+            app:progress_style="solid_line"
+            app:progress_stroke_cap="round"
+            app:progress_shader="sweep"
+            app:progress_text_color="@color/white"
+            app:progress_text_size="@dimen/dp18" />
+
+        <TextView
+            android:id="@+id/cProgressTip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp10"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="下载中..."
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp16"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xing.gfox">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <!--resizeableActivity分屏模式需要安卓7.0以上-->
+    <application
+        android:label="@string/app_name"
+        android:resizeableActivity="true"
+        android:sharedUserId="android.uid.phone">
+        <activity
+            android:name=".util.permissions.ApplyPermissionActivity"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+
+        <!--7.0以上 安装apk-->
+        <provider
+            android:name=".base.provider.FileContext"
+            android:authorities="${applicationId}.dialog.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <!-- 适配全面屏 Android O vivo&oppo-->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" />
+        <!-- 适配刘海屏、水滴屏 Android O 小米 -->
+        <!-- "none" 横竖屏都不绘制耳朵区-->
+        <!-- "portrait" 竖屏绘制到耳朵区-->
+        <!-- "landscape" 横屏绘制到耳朵区-->
+        <!-- "portrait|landscape" 横竖屏都绘制到耳朵区-->
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+        <!-- 适配刘海屏、水滴屏 Android O 华为 -->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
+
+        <!--适配刘海屏、水滴屏 Android P 谷歌 -->
+        <meta-data
+            android:name="android.vendor.full_screen"
+            android:value="true" />
+        <!-- 腾讯X5内核初始化 -->
+        <!--        <service-->
+        <!--            android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"-->
+        <!--            android:label="dexopt"-->
+        <!--            android:process=":dexopt" />-->
+        <!--计步服务-->
+        <service
+            android:name=".base.service.StepService"
+            android:exported="false">
+            <intent-filter>
+                <!-- 系统启动完成后会调用 -->
+                <!-- 自启动广播、时间向后更新、SD卡加载、用户解锁屏幕、时间监听、充电拔插事件 -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.ACTION_TIME_TICK" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </service>
+        <!--下载服务-->
+        <service android:name=".rxHttp.download.FileDownloadService" />
+        <service android:name=".hl_study.Hermes.HermesService" />
+    </application>
+</manifest>

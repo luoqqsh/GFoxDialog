@@ -1,0 +1,128 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+    defaultConfig {
+        applicationId "x.com.dialogdialog"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true//分包处理
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //APP的build.gradle设置支持的SO库架构'armeabi',armeabi-v7a,'x86','arm64-v8a','x86_64'
+        ndk {
+            abiFilters "armeabi-v7a","arm64-v8a"
+        }
+    }
+    //签名配置
+    signingConfigs {
+        release {
+            storeFile file('dialog.jks')
+            keyAlias 'dialog'
+            keyPassword 'dialog'
+            storePassword 'dialog'
+        }
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false// 移除无用的resource文件
+            zipAlignEnabled true // Zipalign优化
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            zipAlignEnabled true
+            shrinkResources true
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    //java1.8支持
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    //排除某些重复项
+    configurations {
+        all*.exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
+    //添加aar包路径
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+    //配置jniLibs路径，也就是so文件路径
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    //多环境配置
+    applicationVariants.all { variant ->
+            if (variant.flavorName == "boshizhonghua") {
+                variant.outputs.all { output ->
+                    //修改生成文件名
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "博时中华${releaseTime()}安卓.apk"
+                        outputFileName = fileName
+                    }
+                }
+            }
+            。。。
+        }
+    flavorDimensions "zhengjuan"
+    productFlavors {
+            boshizhonghua {
+                versionCode 2
+                versionName "1.2.0"
+                buildConfigField "int", "ENV_TYPE", "0"//设置指定渠道标志
+                dimension "zhengjuan"
+                applicationId "com.example.baidu"
+                //manifest中对某些值得赋值，在manifest中用${app_name}，可进行配置替换
+                manifestPlaceholders = ["app_name": "博时中华", "app_launcher_icon": "@mipmap/icon"]
+            }
+        }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.android.material:material:1.0.0'//原来的design
+
+    //生命周期感知
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    //如果你使用java8开发，可以添加这个依赖，里面只有一个类
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.1.0'
+
+    implementation 'androidx.multidex:multidex:2.0.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    //依赖项目Module
+    implementation project(':dialogmodule')
+    //依赖项目Module-排除某些类
+    implementation('com.airbnb.android:lottie:3.3.1') {
+        exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
+    //依赖jar文件
+    implementation files('libs/tbs_sdk_thirdapp_v4.3.0.1148_43697_sharewithdownloadwithfile_withoutGame_obfs_20190805_175505.jar')
+    //依赖注解
+    annotationProcessor '同其他依赖'
+    kapt '同其他依赖'
+    //依赖aar文件
+    implementation(name: 'LanSongSDK-20191226', ext: 'aar')
+}
+
+//Gradle获取当前时间
+static def releaseTime() {
+    return new Date().format("MMddHH", TimeZone.getTimeZone("GMT+8:00"))
+}

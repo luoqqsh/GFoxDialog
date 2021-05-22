@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:innerRadius="49dp"
+    android:shape="ring"
+    android:thickness="@dimen/dp22"
+    android:useLevel="false">
+    <!--oval椭圆，rectangle矩形，ring圆环，line线段-->
+    <!--圆环需要设置useLevel为false才能显示-->
+    <!--thickness圆环厚度，innerRadius内圆半径-->
+
+    <!--设置recyclerview的间隔线的话，必须设置相应的宽或高-->
+    <!--    <size android:width="5dp" />-->
+    <!--    <size android:height="25dp" />-->
+
+    <!--圆角-->
+    <corners android:radius="7dp" />
+    <!--指定位置圆角-->
+    <!--    <corners-->
+    <!--        android:bottomLeftRadius="0dp"-->
+    <!--        android:topLeftRadius="@dimen/dp12"-->
+    <!--        android:bottomRightRadius="@dimen/dp12"-->
+    <!--        android:topRightRadius="@dimen/dp12" />-->
+
+    <!--边框：宽度，颜色，虚线长度，虚线间隔长度-->
+    <stroke
+        android:width="1dp"
+        android:color="#666666"
+        android:dashWidth="3dp"
+        android:dashGap="4dp" />
+
+    <!--填充色-->
+    <!--    <solid android:color="@color/pink" />-->
+    <!--过渡色，会覆盖填充色，方向，过渡色-->
+    <!--radial必须设置gradientRadius渐变半径-->
+    <!--sweep需要通过centerX和centerY控制位置-->
+    <gradient
+        android:angle="180"
+        android:centerColor="#00ff00"
+        android:centerX="0.6"
+        android:centerY="0.8"
+        android:endColor="#ffffff"
+        android:gradientRadius="@dimen/dp55"
+        android:startColor="#ff0000"
+        android:type="sweep" />
+    <padding
+        android:bottom="@dimen/dp20"
+        android:left="@dimen/dp33"
+        android:right="@dimen/dp20"
+        android:top="@dimen/dp18" />
+
+</shape>
