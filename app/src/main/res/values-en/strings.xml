@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Dialog</string>
+    <string name="main_Camera">Camera</string>
+    <string name="main_Player">Player</string>
+    <string name="main_Map">Map</string>
+    <string name="main_Study">Study</string>
+
+</resources>

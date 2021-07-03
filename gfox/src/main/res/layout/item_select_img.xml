@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xing.gfox.view.ScaleFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:scaleHeight="1.5">
+
+    <ImageView
+        android:id="@+id/sFileThumb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="#010101"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/sFileMasking"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="#111212" />
+
+    <ImageView
+        android:id="@+id/sFileState"
+        android:layout_width="@dimen/dp25"
+        android:layout_height="@dimen/dp25"
+        android:layout_marginEnd="@dimen/dp6"
+        android:layout_marginTop="@dimen/dp6"
+        android:layout_gravity="end"
+        android:src="@mipmap/icon_image_un_select" />
+
+</com.xing.gfox.view.ScaleFrameLayout>

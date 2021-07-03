@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="RotateImageView">
+        <attr name="r_singleTime" format="integer" />
+        <attr name="r_num" format="integer" />
+        <attr name="r_isShun" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleProgressBar">
+        <attr name="line_count" format="integer|reference" />
+        <attr name="line_width" format="dimension|reference" />
+        <attr name="progress_start_color" format="color|reference" />
+        <attr name="progress_end_color" format="color|reference" />
+        <attr name="progress_text_color" format="color|reference" />
+        <attr name="progress_text_size" format="dimension|reference" />
+        <attr name="progress_stroke_width" format="dimension|reference" />
+        <attr name="progress_background_color" format="color|reference" />
+        <attr name="progress_start_degree" format="integer|reference" />
+        <attr name="drawBackgroundOutsideProgress" format="boolean|reference" />
+
+        <attr name="progress_blur_radius" format="dimension|reference" />
+        <attr name="progress_blur_style">
+            <enum name="normal" value="0" />
+            <enum name="solid" value="1" />
+            <enum name="outer" value="2" />
+            <enum name="inner" value="3" />
+        </attr>
+
+        <attr name="progress_style">
+            <enum name="line" value="0" />
+            <enum name="solid" value="1" />
+            <enum name="solid_line" value="2" />
+        </attr>
+
+        <attr name="progress_shader">
+            <enum name="linear" value="0" />
+            <enum name="radial" value="1" />
+            <enum name="sweep" value="2" />
+        </attr>
+
+        <attr name="progress_stroke_cap">
+            <enum name="butt" value="0" />
+            <enum name="round" value="1" />
+            <enum name="square" value="2" />
+        </attr>
+
+    </declare-styleable>
+
+    <!--ScaleFrameLayout-->
+    <declare-styleable name="ScaleFrameLayout">
+        <attr name="scaleHeight" format="float" />
+        <attr name="scaleWidth" format="float" />
+    </declare-styleable>
+
+    <!--pickerView-->
+    <declare-styleable name="PickerView">
+        <attr name="textColor_center" format="color" />
+        <attr name="textColor_other" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="isInfinite" format="boolean" />
+        <attr name="p_text" format="string" />
+    </declare-styleable>
+
+
+    <declare-styleable name="SubsamplingScaleImageView">
+        <attr name="src" format="reference" />
+        <attr name="assetName" format="string" />
+        <attr name="panEnabled" format="boolean" />
+        <attr name="zoomEnabled" format="boolean" />
+        <attr name="quickScaleEnabled" format="boolean" />
+        <attr name="tileBackgroundColor" format="color" />
+    </declare-styleable>
+
+    <!--三角形view-->
+    <declare-styleable name="TriangleView">
+        <attr name="trv_color" format="color" />
+        <attr name="trv_direction">
+            <enum name="top" value="0" />
+            <enum name="bottom" value="1" />
+            <enum name="right" value="2" />
+            <enum name="left" value="3" />
+        </attr>
+    </declare-styleable>
+
+    <!--ScrollLayout-->
+    <declare-styleable name="ScrollLayout">
+        <attr name="minOffset" format="dimension" />
+        <attr name="maxOffset" format="dimension" />
+        <attr name="exitOffset" format="dimension" />
+        <attr name="mode">
+            <flag name="open" value="0x0" />
+            <flag name="close" value="0x1" />
+            <flag name="exit" value="0x2" />
+        </attr>
+        <attr name="allowHorizontalScroll" format="boolean" />
+        <attr name="isSupportExit" format="boolean" />
+    </declare-styleable>
+</resources>

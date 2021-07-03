@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/taxiMapLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/addressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/callTaxiBtn"
+        android:background="@drawable/bg_layout"
+        android:layout_marginStart="@dimen/dp20"
+        android:layout_marginEnd="@dimen/dp20"
+        android:layout_marginBottom="@dimen/dp20"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/startAddressText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp20"
+            android:focusable="false"
+            android:maxLines="1"
+            android:paddingStart="@dimen/dp25"
+            android:paddingTop="@dimen/dp15"
+            android:paddingEnd="@dimen/dp25"
+            android:paddingBottom="@dimen/dp15"
+            android:text="当前位置"
+            android:textColor="@color/color66"
+            android:textSize="14sp" />
+
+        <View
+            style="@style/e9HLine"
+            android:layout_marginStart="@dimen/dp15"
+            android:layout_marginEnd="@dimen/dp15" />
+
+        <TextView
+            android:id="@+id/endAddressText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp20"
+            android:maxLines="1"
+            android:paddingStart="@dimen/dp25"
+            android:paddingTop="@dimen/dp15"
+            android:paddingEnd="@dimen/dp25"
+            android:paddingBottom="@dimen/dp15"
+            android:text="您要去哪儿"
+            android:textColor="@color/red"
+            android:textSize="14sp" />
+
+        <View
+            style="@style/e9HLine"
+            android:layout_marginStart="@dimen/dp15"
+            android:layout_marginEnd="@dimen/dp15" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/callTaxiBtn"
+        style="@style/bgButton"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/dp20"
+        android:layout_marginEnd="@dimen/dp20"
+        android:layout_marginBottom="@dimen/dp10"
+        android:text="立即叫车" />
+</RelativeLayout>

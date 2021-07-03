@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.xing.gfoxdialog">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--存储-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <!--闪光灯-->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <!--设置壁纸相关权限-->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
+    <!--锁屏解锁、唤醒权限-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <!--手机信息、联系人等-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <!--悬浮窗-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!--调用安装权限-->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!--杀死后台进程-->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <!--安卓9.0开始的前台服务权限-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!--获取网络状态、位置等信息-->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--相机、麦克风、录音权限-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!--短信-->
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <!--有权查看使用情况的应用-->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+    <!--保活相关-->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <application
+        android:name=".BaseApp.DialogApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Slide.trans"
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
+        <!--android:theme="@style/Theme.GFoxDialog"-->
+
+        <!--高德地图-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="bc0a5f96b7eba08c50f6fd21e42a1eb4" />
+        <!--定位服务-->
+
+        <!--百度地图key-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="f3mk8HXVjwnngwtC5XINDRGjdXZiViF5" />
+
+        <!--谷歌地图-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCK8jFSQ5kSCbcAHd9OB-pkHjrTJmXPz3A" />
+
+        <!--腾讯地图-->
+        <meta-data
+            android:name="TencentMapSDK"
+            android:value="DYZBZ-UQFRW-WJ7RE-O6BRH-P5HFE-HJBT5" />
+
+        <activity
+            android:name=".DialogMainActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="nosensor">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".NotificationActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".DialogActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".H5Activity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".LogActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".GLActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".DialogMainJavaActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".MappingActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".HHMapActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".Media.MediaCodecActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".HKCameraActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".zuoye.StudyTestActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".LockActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="nosensor" />
+        <activity android:name=".demo.mvvm.MVVMActivity" />
+        <activity android:name=".NetActivity" />
+        <activity android:name=".TaxiMainActivity" />
+        <activity android:name=".InformationActivity" />
+        <activity android:name=".SMSActivity" />
+        <activity android:name=".Media.HHMedia3Activity" />
+        <activity android:name=".DiyViewActivity" />
+        <activity android:name=".ThreadActivity" />
+        <activity android:name=".Net2Activity" />
+        <activity android:name=".FragmentTest.switchFragment" />
+        <activity android:name=".ToastActivity" />
+        <!--获取通知消息服务-->
+        <service
+            android:name=".NotificationListener"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+    </application>
+
+
+</manifest>

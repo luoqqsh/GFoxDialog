@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/loadingLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/trans">
+
+    <FrameLayout
+        android:layout_width="@dimen/dp70"
+        android:layout_height="@dimen/dp70"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_loading"
+        android:orientation="vertical">
+
+        <com.xing.gfox.view.RotateImageView
+            android:id="@+id/loadingView"
+            android:layout_width="@dimen/dp50"
+            android:layout_height="@dimen/dp50"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:src="@mipmap/hl_loading"
+            app:r_isShun="true"
+            app:r_num="12"
+            app:r_singleTime="150" />
+
+    </FrameLayout>
+
+</FrameLayout>

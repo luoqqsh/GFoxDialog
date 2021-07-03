@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--interpolator：差值器，表示动画运行时的时间正常方式，fillAfter：表示动画停留在最后运动的结果-->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillAfter="true"
+    android:interpolator="@android:anim/decelerate_interpolator">
+    <!--透明度标签：表示透明0到不透明1之间的变换-->
+    <alpha
+        android:fromAlpha="1.0"
+        android:toAlpha="1.0"/>
+    <!--旋转标签：fromDegrees:表示旋转角度的起始角度，toDegrees：结束角度。pivotX：表示旋转的X轴坐标；pivotY：表示旋转的Y轴坐标-->
+    <rotate
+        android:fromDegrees="0.0"
+        android:pivotX="0%"
+        android:pivotY="0%"
+        android:toDegrees="720" />
+    <!--缩放标签：fromXScale，toXScale表示水平缩放的起始值和结束值;fromYScale，toYScale竖直方向的缩放起始值和结束值。
+    pivotX，pivotY，表示缩放动画效果的基准点x,y轴
+    -->
+<!--    <scale-->
+<!--        android:fromXScale="0.4"-->
+<!--        android:fromYScale="0.4"-->
+<!--        android:pivotX="50%"-->
+<!--        android:pivotY="50%"-->
+<!--        android:toXScale="1.2"-->
+<!--        android:toYScale="1.2"/>-->
+    <!--移动标签：fromXDelta,toXDelta表示x轴移动的像素点；fromYDelta,toYDelta表示Y轴移动的像素点-->
+    <translate
+        android:fromXDelta="0"
+        android:fromYDelta="0"
+        android:toXDelta="0"
+        android:toYDelta="0"/>
+</set>

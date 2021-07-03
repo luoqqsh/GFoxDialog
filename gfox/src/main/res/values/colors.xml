@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <!--基本颜色-->
+    <color name="white">#FFFFFF</color>
+    <color name="whiteDefault">#FAFAFA</color>
+    <color name="black">#000000</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="red">#FF0000</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="green">#00FF00</color>
+    <color name="blue">#0000FF</color>
+    <color name="skyBlue">#87CEEB</color>
+    <color name="purple">#800080</color>
+    <color name="gold">#FFD700</color>
+    <color name="gray">#808080</color>
+    <color name="orange">#FFA500</color>
+    <color name="orangeRed">#FF4500</color>
+    <color name="pink">#FFC0CB</color>
+    <color name="brown">#A52A2A</color>
+    <color name="snowWhite">#FFFAFA</color>
+    <color name="transHalf">#E0000000</color>
+    <color name="trans">#00000000</color>
+
+    <!--常用色-->
+    <color name="color33">#333333</color>
+    <color name="color66">#666666</color>
+    <color name="color99">#999999</color>
+    <color name="colorE3">#E3E3E3</color>
+    <color name="colorE6">#E6E6E6</color>
+    <color name="colorE9">#E9E9E9</color>
+    <color name="colorF8">#F8F8F8</color>
+    <color name="colorF5">#F5F5F5</color>
+
+    <color name="item_bg_n">@color/white</color>
+    <color name="item_bg_p">#c5c5c5</color>
+    <color name="HIGHLIGHT">#33ffffff</color>
+    <color name="LOWLIGHT">#33000000</color>
+
+    <!--Title-->
+    <color name="titleBgColor">@color/white</color>
+    <color name="titleLineColor">@color/white</color>
+    <color name="titleTextColor">@color/black</color>
+    <color name="titleText2Color">@color/black</color>
+    <color name="titleRightTextColor">@color/black</color>
+    <color name="titleLeftTextColor">@color/black</color>
+    <!--StatusRefresh-->
+    <color name="statusTipColor">#b3b3b3</color>
+    <!--pick-->
+    <color name="pick_status_bar">#393a3f</color>
+    <!--前景色-->
+    <color name="easy_photos_fg_primary">#ffffff</color>//3e4145 前景主色，如字体颜色、icon颜色
+    <color name="easy_photos_fg_primary_dark">#9b9b9b</color>//前景偏暗色，如不可用状态的字体颜色
+    <color name="easy_photos_fg_accent">#00AA00</color>//578fff 前景突出色，如发送按钮的背景色，选中状态的颜色
+    <color name="menu_text_easy_photos">#FFFFFF</color>//按钮上的文字颜色，选择器上的文字颜色，选择器的边框颜色
+    <!--背景色-->
+    <color name="easy_photos_bg_primary">#000000</color>//f9f9f9 背景色，如每个activity的背景色，相册的图片间隔线颜色
+    <!--操作栏颜色-->
+    <color name="easy_photos_bar_primary">#393a3f</color>//ffffff 操作栏主色，如相册页顶部和底部操作栏
+    <color name="easy_photos_bar_primary_dark">#303135</color>//f9f9f9 操作栏偏暗色，操作栏间隔线颜色，如相册页返回按钮右边的竖线
+    <color name="easy_photos_bar_primary_translation">#eb212123</color>//b4ffffff
+    操作栏带透明的色值，如预览页的底部操作栏颜色，相册页的相机按钮背景颜色。
+
+    <color name="BgButton">#FFFFFF</color>
+    <color name="BgButtonF0">#F0FFFFFF</color>
+</resources>

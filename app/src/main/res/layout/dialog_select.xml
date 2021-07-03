@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/mdialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请选择响铃方式"
+        android:textColor="@color/blue"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/mbtn1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="跟随系统"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/mbtn2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="跟随视频"
+        android:textSize="18sp" />
+</LinearLayout>

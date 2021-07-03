@@ -1,0 +1,60 @@
+1.Glide 4 的基本使用
+     Glide.with(this).load("http://q8xcfpnt5.bkt.clouddn.com/hzw.jpg").into(ivLogo)
+
+     RequestOptions options = new RequestOptions()
+             .placeholder(R.mipmap.loading)//占位符，未加载成功时预先显示的图片
+             .error(R.mipmap.error)//加载失败时会显示的图片
+             .skipMemoryCache(true)//默认false，开启内存缓存功能。传入true，就表示禁用掉Glide的内存缓存功能
+             .override(100, 200)//指定图片宽高
+             .override(Target.SIZE_ORIGINAL)//原始尺寸，如果不希望使用ImageView默认的变换效果，则设置这个。
+             .diskCacheStrategy(DiskCacheStrategy.NONE);//磁盘缓存策略：
+                                                          NONE-不缓存、
+                                                          DATA-只缓存原始图片、
+                                                          RESOURCE-只缓存转换过后的图片、
+                                                          ALL-原始和转后的图都缓存、
+                                                          AUTOMATIC-智能选择缓存策略（默认）
+     Glide.with(this).asBitmap().load("http://q8xcfpnt5.bkt.clouddn.com/hzw.jpg").apply(options).into(imageView);
+     //with-上下文、asBitmap-只展示静态图、load-路径、apply-配置、into-目标（ImageView）---顺序不能错
+     //as系列：asBitmap-只展示静态图、asGif()-强制指定加载动态图片、asFile()-强制指定加载成文件格式、asDrawable()-强制指定加载成Drawable格式
+     //into-直接加载、preload-预加载
+     
+     //添加回调监听
+     Glide.with(this).asBitmap().load("http://q8xcfpnt5.bkt.clouddn.com/hzw.jpg").apply(options).listener(new RequestListener<Bitmap>() {
+                     @Override
+                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                         //加载失败
+                         return false;
+                     }
+     
+                     @Override
+                     public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                         //加载成功
+                         return false;
+                     }
+                 }).into(imageView);
+                 
+     //下载图片到文件，必须在子线程中执行
+     FutureTarget<File> taget = Glide.with(mActivity).asFile().load("http://xxx.png").submit();//开始后台下载
+     File imgFile = taget.get();//获取下载好的文件，会阻塞线程
+     
+     fitCenter()	如果原图的宽高与ImageView的一致，不做任何改变；否则就是在保持纵横比不变的情况下对图片进行居中缩放。默认。
+     centerInside()	如果原图的宽高小于ImageView的宽高，则不做任何改变；否则执行fitCenter()
+     centerCrop()	如果原图的宽高小于ImageView的宽高，则不做任何改变；否则就缩放图像，以使图像的宽度与给定的宽度匹配，并且的高度大于图像的给定高度，反之亦然，然后裁剪较大的尺寸以与给定的尺寸匹配
+
+     ----Transformation----
+     .circleCrop()//显示圆形图片
+     .transform(BlurTransformation(15, 5))//高斯模糊，参数：模糊度，采样率
+     .transform(RoundedCornersTransformation())//圆角矩形，参数：角度，外边距，圆角类型
+     .transform(GrayscaleTransformation())//灰度效果
+     .transform(CropTransformation(200, 100, CropTransformation.CropType.TOP))//裁剪转换，参数：宽，高，位置（上中下）
+     .transform(CropSquareTransformation())//裁剪正方形
+     .transform(MaskTransformation(R.drawable.mask_starfish))//图形变化，drawable指定形状
+     .transform(BrightnessFilterTransformation(0.3f))//高亮效果
+     .transform(InvertFilterTransformation())//虚幻效果
+     .transform(KuwaharaFilterTransformation())//马赛克效果
+     .transform(PixelationFilterTransformation())//像素效果
+     .transform(SepiaFilterTransformation())//漫画效果
+     .transform(SketchFilterTransformation())//铅笔画效果
+     .transform(SwirlFilterTransformation())//漩涡效果
+     .transform(ToonFilterTransformation())//油画效果
+     .transform(VignetteFilterTransformation())//暗边效果

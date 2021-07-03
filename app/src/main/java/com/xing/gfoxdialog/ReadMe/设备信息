@@ -1,0 +1,88 @@
+华为p30（水滴屏）
+屏幕(不含导航栏):1080,2265
+设备(物理分辨率):1080,2340
+导航栏(下方):126,显示导航栏
+状态栏(上方):75
+res分辨率:xxhdpi
+
+BRAND-品牌:HUAWEI
+MANUFACTURER-制造商:HUAWEI
+MODEL-型号:ELE-AL00
+当前语言:zh
+Android系统版本:9
+Android系统SDK:28
+支持的CPU架构:arm64-v8a armeabi-v7a armeabi
+═══════════════════════════════════════════════
+Nox模拟器（雷电模拟器）
+屏幕(不含导航栏):1280,720
+设备(物理分辨率):1280,720
+导航栏(下方):36,不存在(隐藏)导航栏
+状态栏(上方):36
+res分辨率:hdpi
+
+BRAND-品牌:samsung
+MANUFACTURER-制造商:samsung
+MODEL-型号:SM-G955F
+当前语言:zh
+Android系统版本:7.1.2
+Android系统SDK:25
+支持的CPU架构:armeabi-v7a armeabi
+
+═══════════════════════════════════════════════
+屏幕(不含导航栏):1080,2190
+设备(物理分辨率):1080,2316
+导航栏(下方):126,显示导航栏
+状态栏(上方):84
+是否全面屏手机（纵横比）:是全面屏
+res分辨率:xxhdpi
+
+BRAND-品牌:vivo
+MANUFACTURER-制造商:vivo
+MODEL-型号:vivo NEX S
+当前语言:zh
+Android系统版本:10
+Android系统SDK:29
+系统ROM:VIVO
+ROM版本:10
+支持的CPU架构:arm64-v8a armeabi-v7a armeabi
+SSAID:4e90b50d566ae505
+
+═══════════════════════════════════════════════
+ 屏幕(不含导航栏):1080,2210
+ 设备(物理分辨率):1080,2340
+ 导航栏(下方):130,显示导航栏
+ 状态栏(上方):96
+ 是否全面屏手机（纵横比）:是全面屏
+ res分辨率:xxhdpi
+
+ BRAND-品牌:Xiaomi
+ MANUFACTURER-制造商:Xiaomi
+ MODEL-型号:Redmi K20 Pro Premium Edition
+ 当前语言:zh
+ Android系统版本:10
+ Android系统SDK:29
+ 系统ROM:MIUI
+ ROM版本:V11
+ 支持的CPU架构:arm64-v8a armeabi-v7a armeabi
+ SSAID:d60db892ca6b8dc1
+
+ ═══════════════════════════════════════════════
+ 屏幕(不含导航栏):1080,2236
+ 设备(物理分辨率):1080,2280
+ 导航栏(下方):44,显示导航栏
+ 状态栏(上方):83
+ 是否全面屏手机（纵横比）:是全面屏
+ res分辨率:xxhdpi
+
+ BRAND-品牌:google
+ MANUFACTURER-制造商:Google
+ MODEL-型号:Pixel 4
+ 当前语言:zh
+ Android系统版本:10
+ Android系统SDK:29
+ 系统ROM:GOOGLE
+ ROM版本:unknown
+ 支持的CPU架构:arm64-v8a armeabi-v7a armeabi
+ CPU核数:8
+ SSAID:17eaa8a954c295c0
+ Root权限:未获得Root权限

@@ -1,0 +1,39 @@
+调用方法
+1.视频播放，参数context，播放器内核，视频view类型（surfaceView,TextureVIew,GLSurfeveView），视频容器
+hhPlayer3 = new CVPlayer(this, new HHMediaPlayer(), TvView.NEWSURFACE, hhview);
+或者，传入准备好的surface：
+hhPlayer3 = new CVPlayer(this, new HHMediaPlayer(), surface);
+
+2.音乐播放（不加载视频）
+hhPlayer3 = new CPlayer(this, new HHijkPlayer());
+
+3.
+//添加播放控制界面，类似爱奇艺、优酷
+hhPlayer3.addLiveView();
+//可以自己定义其他view，动态添加
+hhPlayer3.addExtraView(view);
+
+4.prepare完自动播放，默认false，需要准备好后执行start方法
+hhPlayer3.setPlayWhenPrepared(true);
+
+5.设计
+1.写一个播放器实现类继承HHPlayerCore，重写相应的播放方法。
+2.播放流程的控制（比如：什么时候可以暂停，什么时候可以播放）全部在Cplayer中已做处理。
+3.和UI相关的全部在CVPlayer中处理
+4.附加界面，比如播放之前的默认图，广告，等通过添加view的方式添加。
+
+6.已实现功能
+播放控制，调整音量、屏幕亮度，快放慢放，进度控制，全屏显示，显示比例调整、滤镜效果（需要GLSurfaceView，实验中）
+
+7.未实现功能
+投屏、小窗播放、电视机顶盒遥控器适配、电视屏幕适配
+自己实现播放器功能（比如mediacodec、ffmpeg），自己实现视频播放view，比如画中画功能，手势缩放等
+
+8.考虑优化的点
+1.
+播放器和ui的交互，现在用的是接口的方式，考虑使用消息（类似EventBus）的方式，但会存在问题：
+我要打包到jCenter的话，app除了依赖该播放器，还需要依赖相应的消息类（比如EventBus）。
+不希望搞得这么麻烦。
+2.
+添加多个UI后，如果存在ui之间的交互的处理问题，目前没碰到这种需求。
+

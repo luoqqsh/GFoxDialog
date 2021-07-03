@@ -1,0 +1,66 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 30
+
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation "com.github.bumptech.glide:glide:4.12.0"
+    kapt "com.github.bumptech.glide:compiler:4.12.0"
+
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+    // If you want to use the GPU Filters
+    implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
+}
+
+task clearJar(type: Delete) {
+    delete 'build/GlideHelp.jar' //jar包的名字，随便命名
+}
+task makeJar(type: Copy) {
+    //删除存在的
+    delete '../gradle-build/glide4/outputs/jar/GlideHelper.jar'
+    //设置拷贝的文件
+    from('../gradle-build/glide4/intermediates/aar_main_jar/release/')
+    //打进jar包后的文件目录
+    into('../gradle-build/glide4/outputs/jar/')
+    //将classes.jar放入build/libs/目录下
+    //include ,exclude参数来设置过滤
+    //（我们只关心classes.jar这个文件）
+    include('classes.jar')
+    //去掉不需要打包的目录和文件
+    exclude('test/', 'BuildConfig.class', 'R.class')
+    //去掉R开头的文件
+    exclude { it.name.startsWith('R'); }
+    //重命名
+    rename('classes.jar', 'GlideHelper.jar')
+}
+makeJar.dependsOn(build)

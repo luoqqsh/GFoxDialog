@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/aaaaa"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View style="@style/clearFocus" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/mainJava"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="java测试" />
+
+        <Button
+            android:id="@+id/mainNotice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="通知" />
+
+        <Button
+            android:id="@+id/mainWeb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="web" />
+
+        <Button
+            android:id="@+id/mainCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_Camera" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/mainLog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log" />
+
+        <Button
+            android:id="@+id/mainDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="对话框" />
+
+        <Button
+            android:id="@+id/mainOpenGL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="openGL" />
+
+        <Button
+            android:id="@+id/wallpaperset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="paper" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="close" />
+
+        <Button
+            android:id="@+id/mainPlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_Player" />
+
+        <Button
+            android:id="@+id/mainConfusion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="混淆" />
+
+        <Button
+            android:id="@+id/mainStudy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_Study" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/mainView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="view" />
+
+        <Button
+            android:id="@+id/mainToast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Toast" />
+
+        <Button
+            android:id="@+id/mainMediaCodec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="codec" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/mainLocal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="本地" />
+
+        <Button
+            android:id="@+id/mainInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="信息" />
+
+        <Button
+            android:id="@+id/mainBBZ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp3"
+            android:text="bzbc" />
+
+        <Button
+            android:id="@+id/mainSMS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp3"
+            android:text="sms" />
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/mainImg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10dp" />
+
+    <ImageView
+        android:id="@+id/mainImg2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:id="@+id/mainInfo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view4"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:lottie_autoPlay="false"
+        app:lottie_fileName="shan.json"
+        app:lottie_imageAssetsFolder="images/shan/images" />
+</LinearLayout>
