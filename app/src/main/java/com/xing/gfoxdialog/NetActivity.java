@@ -58,8 +58,8 @@ public class NetActivity extends BaseActivity {
             }
         });
 //        manager.startDownload("https://hequn-1258324382.cos.ap-guangzhou.myqcloud.com/pic/95dc5c2bc4a342629fbcd445199af05d.mp4", U_file.DCIM + File.separator + U_string.getFileNameFromUrl("https://hequn-1258324382.cos.ap-guangzhou.myqcloud.com/pic/95dc5c2bc4a342629fbcd445199af05d.mp4"));
-        manager.startDownload("https://hequn-1258324382.cos.ap-guangzhou.myqcloud.com/pic/cc9cf6a28fd54489a20930d058a550c3.mp4", U_file.DCIM + File.separator + U_string.getFileNameFromUrl("https://hequn-1258324382.cos.ap-guangzhou.myqcloud.com/pic/cc9cf6a28fd54489a20930d058a550c3.mp4"));
-        manager.startDownloadAndOpen("https://hequn-1258324382.cos.ap-guangzhou.myqcloud.com/pic/ea6c1a3f302a4655ac4af41bcf308c58.mp4", U_file.DCIM + File.separator + U_string.getFileNameFromUrl("https://hequn-1258324382.cos.ap-guangzhou.myqcloud.com/pic/ea6c1a3f302a4655ac4af41bcf308c58.mp4"));
+        manager.startDownload("https://hequn-1258324382.cos.ap-guangzhou.myqcloud.com/pic/cc9cf6a28fd54489a20930d058a550c3.mp4", U_file.DCIM + File.separator + U_file.getFileNameFromUrl("https://hequn-1258324382.cos.ap-guangzhou.myqcloud.com/pic/cc9cf6a28fd54489a20930d058a550c3.mp4"));
+        manager.startDownloadAndOpen("https://hequn-1258324382.cos.ap-guangzhou.myqcloud.com/pic/ea6c1a3f302a4655ac4af41bcf308c58.mp4", U_file.DCIM + File.separator + U_file.getFileNameFromUrl("https://hequn-1258324382.cos.ap-guangzhou.myqcloud.com/pic/ea6c1a3f302a4655ac4af41bcf308c58.mp4"));
         manager.startDownloadAndOpen("https://d89e5f3d31f228f7455771c43bd08ddc.dlied1.cdntips.net/godlied4.myapp.com/myapp/1104466820/cos.release-40109/10040714_com.tencent.tmgp.sgame_a1338022_3.63.1.5_pCSk3N.apk?mkey=60a455b66e576053&f=9634&cip=110.87.70.166&proto=https&access_type=$header_X-Forwarded-Access-Type", U_file.DCIM + File.separator + "wzry.apk");
     }
 

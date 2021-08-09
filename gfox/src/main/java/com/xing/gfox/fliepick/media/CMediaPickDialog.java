@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -26,7 +27,6 @@ import com.xing.gfox.view.Recyclerview.SpacesItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 
 public class CMediaPickDialog extends BasePickDialog {
     private RecyclerView nSelectItemList;
@@ -99,6 +99,7 @@ public class CMediaPickDialog extends BasePickDialog {
         }
 
         public CMediaPickDialog startSelectImg(FragmentActivity mActivity) {
+            mediaConfig.setPickType(CPickType.images);
             CMediaPickDialog cMediaPickDialog = new CMediaPickDialog();
             cMediaPickDialog.setMediaConfig(mediaConfig);
             cMediaPickDialog.setChooseType(CPickType.images);
@@ -107,9 +108,22 @@ public class CMediaPickDialog extends BasePickDialog {
         }
 
         public CMediaPickDialog startSelectVideo(FragmentActivity mActivity) {
+            mediaConfig.setPickType(CPickType.videos);
             CMediaPickDialog cMediaPickDialog = new CMediaPickDialog();
             cMediaPickDialog.setMediaConfig(mediaConfig);
             cMediaPickDialog.setChooseType(CPickType.videos);
+            cMediaPickDialog.showNow(mActivity);
+            return cMediaPickDialog;
+        }
+
+        public CMediaPickDialog startSelectMusic(FragmentActivity mActivity) {
+            mediaConfig.setPickType(CPickType.audios);
+            mediaConfig.setNeedPreview(false);
+            mediaConfig.setShowCamera(false);
+            mediaConfig.setSpanCount(1);
+            CMediaPickDialog cMediaPickDialog = new CMediaPickDialog();
+            cMediaPickDialog.setMediaConfig(mediaConfig);
+            cMediaPickDialog.setChooseType(CPickType.audios);
             cMediaPickDialog.showNow(mActivity);
             return cMediaPickDialog;
         }
@@ -125,11 +139,11 @@ public class CMediaPickDialog extends BasePickDialog {
     }
 
     public void removeAd() {
-        mediaConfig.setAdTipView(null);
         if (adLayout != null) {
             adLayout.removeAllViews();
             adLayout.setVisibility(View.GONE);
         }
+        mediaConfig.setAdTipView(null);
     }
 
     @Override
@@ -140,6 +154,11 @@ public class CMediaPickDialog extends BasePickDialog {
     @Override
     public float getWidthScale() {
         return 1;
+    }
+
+    @Override
+    public int getHeight() {
+        return ViewGroup.LayoutParams.MATCH_PARENT;
     }
 
     @Override
@@ -155,10 +174,10 @@ public class CMediaPickDialog extends BasePickDialog {
         fileItemAdapter = new FileItemAdapter(mActivitys.get(), mediaConfig, mFileList);
         fileItemAdapter.setCameraListener(() -> {
             chooseTypeTemp = chooseType;
-            if (chooseTypeTemp == CPickType.images) {
+            if (chooseTypeTemp == CPickType.images || chooseTypeTemp == CPickType.camera) {
                 chooseType = CPickType.camera;
                 startCamera();
-            } else if (chooseTypeTemp == CPickType.videos) {
+            } else if (chooseTypeTemp == CPickType.videos || chooseTypeTemp == CPickType.record) {
                 chooseType = CPickType.record;
                 startRecordVideo();
             }
@@ -173,11 +192,7 @@ public class CMediaPickDialog extends BasePickDialog {
     protected View getTitleView() {
         //确定按钮状态变化
         mediaConfig.setOnSelectChangeListener(fileBeans -> {
-            if (fileBeans.size() == 0) {
-                if (pickConfirmText != null) pickConfirmText.setEnabled(false);
-            } else {
-                if (pickConfirmText != null) pickConfirmText.setEnabled(true);
-            }
+            if (pickConfirmText != null) pickConfirmText.setEnabled(fileBeans.size() != 0);
         });
         View view = LayoutInflater.from(mActivitys.get()).inflate(R.layout.item_pick_title, null);
         view.findViewById(R.id.pickBackBtn).setOnClickListener(v -> dismiss());
@@ -191,43 +206,49 @@ public class CMediaPickDialog extends BasePickDialog {
     }
 
     protected void initData() {
-        U_permissions.applyWriteStoragePermission(mActivitys.get(), new U_permissions.RequestPermissionCallBack() {
+        U_permissions.applyWriteStoragePermission(dialog.get().getContext(), new U_permissions.RequestPermissionCallBack() {
             @Override
             public void requestPermissionSuccess() {
                 switch (chooseType) {
                     case CPickType.images:
                         pickFolderNameText.setText(R.string.pick_all_pic);
-                        U_mediaList.getLocalImgFromLoader(mActivitys.get(), mediaFolderMap -> {
-                            List<FolderBean> folderBeanList = new ArrayList<>();
-                            for (String key : mediaFolderMap.keySet()) {
-                                folderBeanList.add(mediaFolderMap.get(key));
-                            }
-                            initFolderList(folderBeanList);
-                            mFileList.clear();
-                            mFileList.addAll(folderBeanList.get(0).getMediaFileBeanList());
-                            fileItemAdapter.notifyDataSetChanged(mFileList);
+                        U_mediaList.getImgListByContentResolver(dialog.get(), mediaFolderMap -> {
+                            dealData(mediaFolderMap);
                         });
                         break;
                     case CPickType.videos:
                         pickFolderNameText.setText(R.string.pick_all_video);
-                        U_mediaList.getLocalVideoFromLoader(mActivitys.get(), mediaFolderMap -> {
-                            List<FolderBean> folderBeanList = new ArrayList<>();
-                            for (String key : mediaFolderMap.keySet()) {
-                                folderBeanList.add(mediaFolderMap.get(key));
-                            }
-                            initFolderList(folderBeanList);
-                            mFileList.clear();
-                            mFileList.addAll(folderBeanList.get(0).getMediaFileBeanList());
-                            fileItemAdapter.notifyDataSetChanged(mFileList);
+                        U_mediaList.getVideoListByContentResolver(mActivitys.get(), mediaFolderMap -> {
+                            dealData(mediaFolderMap);
                         });
+                        break;
+                    case CPickType.audios:
+                        pickFolderNameText.setText(R.string.pick_all_audio);
+                        U_mediaList.getAudioListByContentResolver(mActivitys.get(), mediaFolderMap -> {
+                            dealData(mediaFolderMap);
+                        });
+                        break;
                 }
             }
 
             @Override
-            public void requestPermissionFail(Map<String, Boolean> failPermission) {
-                U_Toast.show(mActivitys.get().getString(R.string.no_permission));
+            public void requestPermissionFail(List<String> failPermission) {
+                U_Toast.show(mActivitys.get().getString(R.string.no_write_permission));
             }
         });
+    }
+
+    public void dealData(Map<String, FolderBean> mediaFolderMap) {
+        List<FolderBean> folderBeanList = new ArrayList<>();
+        for (String key : mediaFolderMap.keySet()) {
+            folderBeanList.add(mediaFolderMap.get(key));
+        }
+        initFolderList(folderBeanList);
+        mFileList.clear();
+        if (folderBeanList.size() > 0) {
+            mFileList.addAll(folderBeanList.get(0).getMediaFileBeanList());
+        }
+        fileItemAdapter.notifyDataSetChanged(mFileList);
     }
 
     protected void initFolderList(List<FolderBean> folderBeanList) {
@@ -276,5 +297,13 @@ public class CMediaPickDialog extends BasePickDialog {
         if (resultCode == Activity.RESULT_CANCELED) {
             chooseType = chooseTypeTemp;
         }
+    }
+
+    @Override
+    protected void onDialogDismiss() {
+        super.onDialogDismiss();
+        fileItemAdapter.releasePlayer();
+        removeAd();
+        adLayout = null;
     }
 }

@@ -14,6 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
@@ -106,5 +107,11 @@ public interface LivedataService {
     @POST
     LiveData<String> httpPostMultipleFileUseUrl(@Url String url, @Body MultipartBody body);
 
+    @Multipart
+    @POST("{path}")
+    LiveData<String> uploadHead(
+            @Path(value = "path", encoded = true) String path,
+            @Part MultipartBody.Part file
+    );
 }
 

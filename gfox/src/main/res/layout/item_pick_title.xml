@@ -16,7 +16,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/icon_back" />
+            android:src="@mipmap/back_arrow" />
 
         <View
             android:layout_width="1dp"
@@ -43,7 +43,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="2dp"
             android:layout_toEndOf="@+id/pickFolderNameText"
-            android:src="@mipmap/text_indicator" />
+            android:src="@mipmap/selector_more" />
 
         <FrameLayout
             android:id="@+id/pickConfirmBtn"

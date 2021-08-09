@@ -12,14 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.xing.gfox.base.toast.U_Toast;
 import com.xing.gfox.util.U_permissions;
+import com.xing.gfox.util.model.SMSBean;
 import com.xing.gfoxdialog.BaseApp.BaseActivity;
 import com.xing.gfoxdialog.databinding.ActivitySmsBinding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import com.xing.gfox.util.model.SMSBean;
 
 public class SMSActivity extends BaseActivity {
     ActivitySmsBinding binding;
@@ -40,7 +38,7 @@ public class SMSActivity extends BaseActivity {
             }
 
             @Override
-            public void requestPermissionFail(Map<String, Boolean> failPermission) {
+            public void requestPermissionFail(List<String> failPermission) {
                 U_Toast.show("權限獲取失敗");
             }
         }, Manifest.permission.READ_SMS));

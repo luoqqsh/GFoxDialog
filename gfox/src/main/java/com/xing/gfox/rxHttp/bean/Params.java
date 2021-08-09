@@ -1,6 +1,8 @@
 package com.xing.gfox.rxHttp.bean;
 
-public class Params {
+import java.io.Serializable;
+
+public class Params implements Serializable {
     public static final String RES_CODE = "code";
     public static final String RES_PAGE = "page";
     public static final String RES_MSG = "message";

@@ -89,7 +89,8 @@ class DialogMainActivity : BaseActivity() {
             override fun requestPermissionSuccess() {
             }
 
-            override fun requestPermissionFail(map: Map<String, Boolean>) {}
+            override fun requestPermissionFail(failPermission: MutableList<String>?) {
+            }
         })
     }
 

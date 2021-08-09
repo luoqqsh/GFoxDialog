@@ -28,6 +28,6 @@
         android:layout_marginEnd="@dimen/dp6"
         android:layout_marginTop="@dimen/dp6"
         android:layout_gravity="end"
-        android:src="@mipmap/icon_image_un_select" />
+        android:src="@mipmap/selector_unselect" />
 
 </com.xing.gfox.view.ScaleFrameLayout>

@@ -11,7 +11,7 @@ public abstract class BaseActivity extends HLBaseActivity {
     @Override
     public void initUI(Bundle savedInstanceState) {
         if (isShowTitle()) {
-            mTitle.setLeftButtonImage(R.mipmap.icon_back, view -> finish());
+            mTitle.setLeftButtonImage(R.mipmap.back_arrow, view -> finish());
         }
     }
 

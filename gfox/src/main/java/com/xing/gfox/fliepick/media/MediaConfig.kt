@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.View
 import com.xing.gfox.R
 import com.xing.gfox.base.toast.U_Toast
+import com.xing.gfox.fliepick.bean.CPickType
 import com.xing.gfox.fliepick.bean.FileBean
 import com.xing.gfox.fliepick.bean.MediaSelectListener
 import com.xing.gfox.util.U_screen
@@ -16,6 +17,7 @@ class MediaConfig : Serializable {
      */
     var minSelectCount = 1 //限制最小数量
     var maxSelectCount = 1 //限制最大数量
+    var pickType = CPickType.files //选择类型
     var adTipView: View? = null //提示view
     var isShowCamera = true //是否顯示拍照
     var isNeedPreview = true //是否顯示預覽

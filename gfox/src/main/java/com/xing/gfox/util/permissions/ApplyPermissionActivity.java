@@ -49,11 +49,7 @@ public class ApplyPermissionActivity extends Activity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            boolean[] isNoTip = new boolean[permissions.length];
-            for (int i = 0; i < permissions.length; i++) {
-                isNoTip[i] = !ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[i]);
-            }
-            U_permissions.requestPermissionsResult(permissions, grantResults, isNoTip);
+            U_permissions.requestPermissionsResult(permissions, grantResults);
             finish();
         }
     }

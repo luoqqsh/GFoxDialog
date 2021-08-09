@@ -8,7 +8,7 @@ public @interface CPickType {
     int files = 0;//文件
     int images = 1;//图片
     int videos = 2;//视频
-    int music = 3;//音乐
+    int audios = 3;//音乐
     int camera = 4;//拍照
     int record = 5;//录像
     int crop = 6;//裁剪图片

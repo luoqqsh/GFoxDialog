@@ -13,5 +13,5 @@
         android:background="#80010101"
         android:padding="20dp"
         android:scaleType="center"
-        android:src="@mipmap/ic_photo_camera"/>
+        android:src="@mipmap/selector_camera"/>
 </FrameLayout>

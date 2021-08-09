@@ -31,7 +31,6 @@ import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
-
 public class U_uri {
     /**
      * 在读取和写入时，我们可以借助 Content Uri 从 ContentResolver 里面拿到 AssetFileDescriptor，然后就可以拿到 InputSteam 或 OutputStream
@@ -73,19 +72,6 @@ public class U_uri {
         contentValues.put(MediaStore.Video.Media.DATE_TAKEN, System.currentTimeMillis());
         contentValues.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
         return context.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues);
-    }
-
-    public static Uri getPhotoUri(Cursor cursor) {
-        return getMediaUri(cursor, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-    }
-
-    public static Uri getVideoUri(Cursor cursor) {
-        return getMediaUri(cursor, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-    }
-
-    public static Uri getMediaUri(Cursor cursor, Uri uri) {
-        String id = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-        return Uri.withAppendedPath(uri, id);
     }
 
     /**

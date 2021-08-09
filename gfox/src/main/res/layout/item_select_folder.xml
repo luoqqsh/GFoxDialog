@@ -27,7 +27,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="15dp"
-        android:src="@mipmap/icon_image_select" />
+        android:src="@mipmap/selector_select" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,13 +1,17 @@
 package com.xing.gfox.util;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import com.xing.gfox.R;
 import com.xing.gfox.log.ViseLog;
+import com.xing.gfox.media.U_media;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,6 +49,7 @@ public class U_file {
     public static final String SDROOT = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DCIM = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
     public static final String MUSIC = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+    public static final String PICTURES = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
     public static final String MOVIE = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath();
     public static final String ALARMS = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS).getAbsolutePath();
     public static final String RINGTONES = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES).getAbsolutePath();
@@ -176,18 +181,14 @@ public class U_file {
 
     public static boolean createFolder(File folder) {
         if (!isFolderExist(folder)) {
-            return (folder.mkdirs());
+            return folder.mkdirs();
         } else {
             return true;
         }
     }
 
     public static boolean createFileFolder(File file) {
-        if (isFileExist(file)) {
-            return createFolder(file.getParentFile());
-        } else {
-            return false;
-        }
+        return createFolder(file.getParentFile());
     }
 
     /**
@@ -359,13 +360,55 @@ public class U_file {
         }
     }
 
-    public static boolean moveFile(String inputFilePath, String outputFilePath, boolean isReplace) {
-        ViseLog.showInfo(U_file.class.getName(), "文件剪切：" + inputFilePath + " -> " + outputFilePath);
-        if (copyFile(inputFilePath, outputFilePath, isReplace)) {
-            File file = new File(inputFilePath);
-            return deleteFile(file);
+    //复制沙盒私有文件到Picture公共目录下
+    //orgFilePath是要复制的文件私有目录路径
+    public static boolean copyImgToPicture(Context context, String orgFilePath) {
+        return copyFileToDownload(context, orgFilePath, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    }
+
+    public static boolean copyVideoToMovie(Context context, String orgFilePath) {
+        return copyFileToDownload(context, orgFilePath, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+    }
+
+    public static boolean copyFileToDownload(Context context, String orgFilePath) {
+        return copyFileToDownload(context, orgFilePath, null);
+    }
+
+    private static boolean copyFileToDownload(Context context, String inputFile, Uri external) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (external == null) external = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
+            return copyFileByContentResolver(context, inputFile, external);
+        } else {
+            String fileName = System.currentTimeMillis() + getFileNameFromUrl(inputFile);
+            String filePath = "";
+            if (external == MediaStore.Images.Media.EXTERNAL_CONTENT_URI) {
+                filePath = PICTURES + File.separator + fileName;
+            } else if (external == MediaStore.Video.Media.EXTERNAL_CONTENT_URI) {
+                filePath = MOVIE + File.separator + fileName;
+            } else {
+                filePath = DOWNLOADS + File.separator + fileName;
+            }
+            U_file.copyFile(inputFile, filePath, true);
+            U_media.updateMedia(context, filePath);
+            return true;
         }
-        return false;
+    }
+
+    private static boolean copyFileByContentResolver(Context context, String orgFilePath, Uri external) {
+        try {
+            ContentValues values = new ContentValues();
+            long currentTimeMillis = System.currentTimeMillis();
+            values.put(MediaStore.Files.FileColumns.DISPLAY_NAME, currentTimeMillis + getExtFromFileName(orgFilePath));
+            values.put(MediaStore.Files.FileColumns.MIME_TYPE, getMIMETypeByFile(orgFilePath));//MediaStore对应类型名
+            values.put(MediaStore.Files.FileColumns.TITLE, currentTimeMillis + "");
+//            values.put(MediaStore.Files.FileColumns.RELATIVE_PATH, "DCIM/Camera");//指定存放文件夹名，需要系统大于29
+            ContentResolver resolver = context.getContentResolver();
+            Uri insertUri = resolver.insert(external, values);//使用ContentResolver创建需要操作的文件
+            return U_file.copyFile(new FileInputStream(orgFilePath), resolver.openOutputStream(insertUri));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static boolean copyFile(InputStream inputStream, OutputStream outputStream) {
@@ -392,6 +435,14 @@ public class U_file {
             }
         }
         return true;
+    }
+
+    public static boolean moveFile(String inputFilePath, String outputFilePath, boolean isReplace) {
+        ViseLog.showInfo(U_file.class.getName(), "文件剪切：" + inputFilePath + " -> " + outputFilePath);
+        if (copyFile(inputFilePath, outputFilePath, isReplace)) {
+            return deleteFile(new File(inputFilePath));
+        }
+        return false;
     }
 
     public static boolean moveFolder(String inputFilePath, String outputFilePath) {
@@ -613,8 +664,6 @@ public class U_file {
             try {
                 fis = new FileInputStream(file);
                 size = fis.available();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -635,16 +684,24 @@ public class U_file {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static int getFileType(String path) {
-        path = path.toLowerCase();
-        if (getExtFromFilename(path).equals(".doc") || getExtFromFilename(path).equals(".docx") || getExtFromFilename(path).equals(".xls") || getExtFromFilename(path).equals(".xlsx")
-                || getExtFromFilename(path).equals(".ppt") || getExtFromFilename(path).equals(".pptx")) {
-            return TYPE_DOC;
-        } else if (getExtFromFilename(path).equals(".apk")) {
-            return TYPE_APK;
-        } else if (getExtFromFilename(path).equals(".zip") || getExtFromFilename(path).equals(".rar") || getExtFromFilename(path).equals(".tar") || getExtFromFilename(path).equals(".gz")) {
-            return TYPE_ZIP;
-        } else {
-            return -1;
+        path = getExtFromFileName(path.toLowerCase());
+        switch (path) {
+            case ".doc":
+            case ".docx":
+            case ".xls":
+            case ".xlsx":
+            case ".ppt":
+            case ".pptx":
+                return TYPE_DOC;
+            case ".apk":
+                return TYPE_APK;
+            case ".zip":
+            case ".rar":
+            case ".tar":
+            case ".gz":
+                return TYPE_ZIP;
+            default:
+                return -1;
         }
     }
 
@@ -666,21 +723,32 @@ public class U_file {
      * 通过文件名获取文件图标
      */
     public static int getFileIconByPath(String path) {
-        path = path.toLowerCase();
-        int iconId = R.mipmap.icon_error;
+        path = getExtFromFileName(path.toLowerCase());
+        int iconId = R.mipmap.state_error;
 
-        if (getExtFromFilename(path).equals(".txt")) {
-            iconId = R.mipmap.icon_error;
-        } else if (getExtFromFilename(path).equals(".doc") || getExtFromFilename(path).equals(".docx")) {
-            iconId = R.mipmap.icon_error;
-        } else if (getExtFromFilename(path).equals(".xls") || getExtFromFilename(path).equals(".xlsx")) {
-            iconId = R.mipmap.icon_error;
-        } else if (getExtFromFilename(path).equals(".ppt") || getExtFromFilename(path).equals(".pptx")) {
-            iconId = R.mipmap.icon_error;
-        } else if (getExtFromFilename(path).equals(".xml")) {
-            iconId = R.mipmap.icon_error;
-        } else if (getExtFromFilename(path).equals(".htm") || getExtFromFilename(path).equals(".html")) {
-            iconId = R.mipmap.icon_error;
+        switch (path) {
+            case ".txt":
+                iconId = R.mipmap.state_error;
+                break;
+            case ".doc":
+            case ".docx":
+                iconId = R.mipmap.state_error;
+                break;
+            case ".xls":
+            case ".xlsx":
+                iconId = R.mipmap.state_error;
+                break;
+            case ".ppt":
+            case ".pptx":
+                iconId = R.mipmap.state_error;
+                break;
+            case ".xml":
+                iconId = R.mipmap.state_error;
+                break;
+            case ".htm":
+            case ".html":
+                iconId = R.mipmap.state_error;
+                break;
         }
         return iconId;
     }
@@ -689,8 +757,8 @@ public class U_file {
      * 是否是图片文件
      */
     public static boolean isPicFile(String path) {
-        path = path.toLowerCase();
-        return getExtFromFilename(path).equals(".jpg") || getExtFromFilename(path).equals(".jpeg") || getExtFromFilename(path).equals(".png");
+        path = getExtFromFileName(path.toLowerCase());
+        return path.equals(".jpg") || path.equals(".jpeg") || path.equals(".png");
     }
 
     /**
@@ -700,18 +768,38 @@ public class U_file {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
-    /**
-     * 从文件的全名得到文件的拓展名
-     *
-     * @param filename
-     * @return
-     */
-    public static String getExtFromFilename(String filename) {
+    //从文件的全名得到文件的拓展名
+    public static String getExtFromFileName(String filename) {
         int dotPosition = filename.lastIndexOf('.');
         if (dotPosition != -1) {
-            return filename.substring(dotPosition + 1).toLowerCase();
+            return filename.substring(dotPosition).toLowerCase();
         }
         return "";
+    }
+
+    //获取url里的/后面的文件名
+    public static String getFileNameFromUrl(String url) {
+        int index = url.lastIndexOf("/");
+        return url.substring(index + 1);
+    }
+
+    //根据后缀获取类型
+    public static String getMIMETypeByFile(String fileName) {
+        if (TextUtils.isEmpty(fileName)) return "*/*";
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex < 0) {
+            return "*/*";
+        }
+        /* 获取文件的后缀名*/
+        String end = fileName.substring(dotIndex).toLowerCase();
+        if (TextUtils.isEmpty(end)) return "*/*";
+        String type = "*/*";
+        //在MIME和文件类型的匹配表中找到对应的MIME类型。
+        String[][] fileMiMeType = U_fileOpen.getFileMiMeType();
+        for (String[] strings : fileMiMeType) { //MIME_MapTable??在这里你一定有疑问，这个MIME_MapTable是什么？
+            if (end.equals(strings[0])) type = strings[1];
+        }
+        return type;
     }
 
     /**
@@ -727,4 +815,5 @@ public class U_file {
         cal.setTimeInMillis(time);
         return formatter.format(cal.getTime());
     }
+
 }

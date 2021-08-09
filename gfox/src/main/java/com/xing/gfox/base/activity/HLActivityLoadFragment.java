@@ -45,7 +45,7 @@ public class HLActivityLoadFragment extends HLBaseActivity {
         String titleStr = intent.getStringExtra("titleStr");
         String btnRightStr = intent.getStringExtra("btnRightStr");
 
-        mTitle.setLeftButtonImage(R.mipmap.icon_back, view -> finish());
+        mTitle.setLeftButtonImage(R.mipmap.back_arrow, view -> finish());
         mTitle.setTitleText(titleStr);
 
         if (btnRightStr != null && onBtnRightClickListener != null) {

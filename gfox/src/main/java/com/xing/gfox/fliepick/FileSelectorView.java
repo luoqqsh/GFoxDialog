@@ -166,8 +166,8 @@ public class FileSelectorView extends ListView {
             if (convertView == null) {
                 view = View.inflate(getContext(), R.layout.item_select_file, null);
                 ViewHolder viewHolder = new ViewHolder();
-                viewHolder.fileIcon = view.findViewById(R.id.file_icon);
-                viewHolder.filePath = view.findViewById(R.id.file_path);
+                viewHolder.fileIcon = view.findViewById(R.id.sFileThumb);
+                viewHolder.filePath = view.findViewById(R.id.sFileName);
                 //绑定
                 view.setTag(viewHolder);
             } else {

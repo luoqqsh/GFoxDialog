@@ -1,9 +1,12 @@
 package com.xing.gfox.fliepick.media;
 
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -11,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.xing.gfox.R;
 import com.xing.gfox.base.interfaces.OnSimpleListener;
+import com.xing.gfox.base.toast.U_Toast;
 import com.xing.gfox.fliepick.bean.CPickType;
 import com.xing.gfox.fliepick.bean.FileBean;
 
@@ -24,6 +29,8 @@ public class FileItemAdapter extends RecyclerView.Adapter<FileItemAdapter.ViewHo
     private List<FileBean> mediaFileBeanList;
     private ViewHolder singleSelectHolder;
     private OnSimpleListener cameraListener;
+    private MediaPlayer mediaPlayer;
+    private Uri playUri;
 
     public FileItemAdapter(FragmentActivity mActivity, MediaConfig mediaConfig, List<FileBean> mediaFileBeanList) {
         this.mActivity = mActivity;
@@ -36,16 +43,22 @@ public class FileItemAdapter extends RecyclerView.Adapter<FileItemAdapter.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        if (mediaConfig.isShowCamera() && position == 0) {
-            return CPickType.camera;
-        } else {
-            return CPickType.images;
+        switch (mediaConfig.getPickType()) {
+            case CPickType.files:
+            case CPickType.audios:
+                return mediaConfig.getPickType();
+            default:
+                if (mediaConfig.isShowCamera() && position == 0) {
+                    return CPickType.camera;
+                } else {
+                    return CPickType.images;
+                }
         }
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FileItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case CPickType.images:
             case CPickType.videos:
@@ -54,6 +67,10 @@ public class FileItemAdapter extends RecyclerView.Adapter<FileItemAdapter.ViewHo
             case CPickType.camera:
                 View photo = LayoutInflater.from(mActivity).inflate(R.layout.item_select_camera, parent, false);
                 return new ViewHolder(photo);
+            case CPickType.files:
+            case CPickType.audios:
+                View music = LayoutInflater.from(mActivity).inflate(R.layout.item_select_file, parent, false);
+                return new ViewHolder(music);
             default:
                 View view = LayoutInflater.from(mActivity).inflate(R.layout.item_select_camera, parent, false);
                 return new ViewHolder(view);
@@ -61,11 +78,11 @@ public class FileItemAdapter extends RecyclerView.Adapter<FileItemAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FileItemAdapter.ViewHolder holder, int position) {
+        FileBean mediaFileBean = mediaFileBeanList.get(position);
         switch (getItemViewType(position)) {
             case CPickType.images:
             case CPickType.videos:
-                FileBean mediaFileBean = mediaFileBeanList.get(position);
                 Glide.with(mActivity).load(mediaFileBean.getFilePathUri())
 //                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE))
                         .into(holder.sFileThumb);
@@ -77,7 +94,11 @@ public class FileItemAdapter extends RecyclerView.Adapter<FileItemAdapter.ViewHo
                     if (mediaConfig.isNeedPreview()) {//跳转到预览页面
                         ImgLocalPreviewDialog dialog = new ImgLocalPreviewDialog();
                         dialog.setImageList(mediaFileBeanList);
-                        dialog.setIndex(position - 1);
+                        if (mediaConfig.isShowCamera()) {
+                            dialog.setIndex(position);
+                        } else {
+                            dialog.setIndex(position - 1);
+                        }
                         dialog.showNow(mActivity);
                     } else {
                         checkedImage(holder, mediaFileBean);
@@ -91,6 +112,23 @@ public class FileItemAdapter extends RecyclerView.Adapter<FileItemAdapter.ViewHo
                     }
                 });
                 break;
+            case CPickType.files:
+                holder.sFileName.setText(mediaFileBean.getFileName());
+                holder.sFileThumb.setImageResource(R.mipmap.selector_music);
+                holder.itemView.setOnClickListener(v -> {
+                    checkedImage(holder, mediaFileBean);
+                });
+                break;
+            case CPickType.audios:
+                holder.sFileName.setText(mediaFileBean.getFileName());
+                holder.sFileThumb.setImageResource(R.mipmap.selector_music);
+                holder.itemView.setOnClickListener(v -> {
+                    checkedImage(holder, mediaFileBean);
+                });
+                holder.sFileThumb.setOnClickListener(view -> {
+                    play(mediaFileBean.getFilePathUri());
+                });
+                break;
         }
     }
 
@@ -100,16 +138,16 @@ public class FileItemAdapter extends RecyclerView.Adapter<FileItemAdapter.ViewHo
     private void setItemSelect(ViewHolder holder, boolean isSelect) {
         if (mediaConfig.isSingleSelect()) {
             if (singleSelectHolder != null) {
-                singleSelectHolder.sFileState.setImageResource(R.mipmap.icon_image_un_select);
+                singleSelectHolder.sFileState.setImageResource(R.mipmap.selector_unselect);
                 singleSelectHolder.sFileMasking.setAlpha(0.2f);
             }
             singleSelectHolder = holder;
         }
         if (isSelect) {
-            holder.sFileState.setImageResource(R.mipmap.icon_image_select);
+            holder.sFileState.setImageResource(R.mipmap.selector_select);
             holder.sFileMasking.setAlpha(0.5f);
         } else {
-            holder.sFileState.setImageResource(R.mipmap.icon_image_un_select);
+            holder.sFileState.setImageResource(R.mipmap.selector_unselect);
             holder.sFileMasking.setAlpha(0.2f);
         }
     }
@@ -144,6 +182,7 @@ public class FileItemAdapter extends RecyclerView.Adapter<FileItemAdapter.ViewHo
         ImageView sFileState;
         ImageView sFileMasking;
         ImageView sFileCamera;
+        TextView sFileName;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -151,6 +190,7 @@ public class FileItemAdapter extends RecyclerView.Adapter<FileItemAdapter.ViewHo
             sFileState = itemView.findViewById(R.id.sFileState);
             sFileMasking = itemView.findViewById(R.id.sFileMasking);
             sFileCamera = itemView.findViewById(R.id.sFileCamera);
+            sFileName = itemView.findViewById(R.id.sFileName);
         }
     }
 
@@ -173,5 +213,31 @@ public class FileItemAdapter extends RecyclerView.Adapter<FileItemAdapter.ViewHo
 
     public void setCameraListener(OnSimpleListener cameraListener) {
         this.cameraListener = cameraListener;
+    }
+
+    private void play(Uri path) {
+        if (playUri != null && playUri == path) {
+            return;
+        }
+        playUri = path;
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+        }
+        try {
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(mActivity, path);
+            mediaPlayer.prepareAsync();
+            mediaPlayer.setOnPreparedListener(MediaPlayer::start);
+        } catch (IOException e) {
+            e.printStackTrace();
+            U_Toast.show("播放失败");
+        }
+    }
+
+    public void releasePlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 }

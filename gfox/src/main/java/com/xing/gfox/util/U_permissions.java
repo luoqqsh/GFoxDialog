@@ -1,21 +1,23 @@
 package com.xing.gfox.util;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.xing.gfox.util.permissions.ApplyPermissionActivity;
 import com.xing.gfox.util.permissions.ApplyPermissionFragment;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-
 
 /**
  * 动态权限申请
@@ -25,7 +27,7 @@ public class U_permissions {
     public interface RequestPermissionCallBack {
         void requestPermissionSuccess();
 
-        void requestPermissionFail(Map<String, Boolean> failPermission);
+        void requestPermissionFail(List<String> failPermission);
     }
 
     private static RequestPermissionCallBack mPermissionCallBack;
@@ -55,8 +57,8 @@ public class U_permissions {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             applyPermission(context, permissionCallBack, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
         } else {
-            Map<String, Boolean> failPermission = new HashMap<>();
-            failPermission.put("android.permission.ACCESS_BACKGROUND_LOCATION", false);
+            List<String> failPermission = new ArrayList<>();
+            failPermission.add("android.permission.ACCESS_BACKGROUND_LOCATION");
             permissionCallBack.requestPermissionFail(failPermission);
         }
     }
@@ -170,18 +172,33 @@ public class U_permissions {
         }
     }
 
-    public static void requestPermissionsResult(String[] permissions, int[] grantResults, boolean[] isNoTip) {
-        boolean isApplyFail = false;
-        Map<String, Boolean> failPermission = new HashMap<>();
-        for (int i = 0; i < permissions.length; i++) {
-            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                //存在权限申请被拒绝
-                isApplyFail = true;
-                failPermission.put(permissions[i], isNoTip[i]);
+    public static void requestPermissionsResult(Map<String, Boolean> results) {
+        List<String> fail = new ArrayList<>();
+        for (Map.Entry<String, Boolean> entry : results.entrySet()) {
+            if (!entry.getValue()) {
+                fail.add(entry.getKey());
             }
         }
-        if (isApplyFail) {
-            //被拒绝了
+        if (fail.size() != 0) {//被拒绝了
+            if (mPermissionCallBack != null) {
+                mPermissionCallBack.requestPermissionFail(fail);
+            }
+        } else { //申请成功
+            if (mPermissionCallBack != null) {
+                mPermissionCallBack.requestPermissionSuccess();
+            }
+        }
+        mPermissionCallBack = null;
+    }
+
+    public static void requestPermissionsResult(String[] permissions, int[] grantResults) {
+        List<String> failPermission = new ArrayList<>();
+        for (int i = 0; i < permissions.length; i++) {
+            if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                failPermission.add(permissions[i]);
+            }
+        }
+        if (failPermission.size() != 0) {//被拒绝了
             if (mPermissionCallBack != null) {
                 mPermissionCallBack.requestPermissionFail(failPermission);
             }
@@ -192,5 +209,9 @@ public class U_permissions {
             }
         }
         mPermissionCallBack = null;
+    }
+
+    public static boolean checkIsAlwaysFail(Activity activity, String permission) {
+        return !ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
     }
 }

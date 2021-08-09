@@ -8,7 +8,13 @@
     <string name="pick_confirm_select">确定</string>
     <string name="pick_all_pic">全部图片</string>
     <string name="pick_all_video">全部视频</string>
-    <string name="no_permission">没有读写权限</string>
+    <string name="pick_all_audio">全部音乐</string>
+    <string name="no_write_permission">没有读写权限</string>
     <string name="no_camera_permission">没有拍照权限</string>
-    <string name="NoImg">手机里没有照片</string>
+    <string name="no_img">手机里没有照片</string>
+    <string name="time_hour">小时</string>
+    <string name="time_minute">分钟</string>
+    <string name="time_second">秒</string>
+    <string name="no_location_permission">未获取定位权限</string>
+    <string name="no_location">无法定位，请打开定位服务</string>
 </resources>

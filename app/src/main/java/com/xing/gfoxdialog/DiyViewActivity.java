@@ -29,7 +29,7 @@ public class DiyViewActivity extends BaseActivity {
 
     @Override
     public void initUI(Bundle savedInstanceState) {
-        mTitle.setLeftButtonImage(R.mipmap.hl_back_black, v -> finish());
+        mTitle.setLeftButtonImage(R.mipmap.back_black, v -> finish());
         mTitle.setTitleText("DIYView");
         binding.countDownBtn.setOnClickListener(v -> {
             Toast.makeText(mActivity, "click countdown button", Toast.LENGTH_SHORT).show();

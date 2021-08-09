@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+
 import com.xing.gfox.R;
 
 import java.io.File;
@@ -29,13 +30,13 @@ public class DefaultFileIconCreator implements FileSelectorView.FileIconCreator 
     @Override
     public Drawable getIcon(File file) {
         if (file == null) {
-            return context.getResources().getDrawable(R.mipmap.ic_folder_back);
+            return context.getResources().getDrawable(R.mipmap.back_folder);
         } else if (file.isDirectory()) {
-            return context.getResources().getDrawable(R.mipmap.folder);
+            return context.getResources().getDrawable(R.mipmap.selector_folder);
         } else { // 根据文件后缀生成对应的文件图标
             String fileExtensionString = file.getName().substring(file.getName().lastIndexOf(".") + 1).toUpperCase();
             BitmapDrawable savedFileIcon = savedFileIconMap.get(fileExtensionString);
-            BitmapDrawable commonFileIcon = (BitmapDrawable) context.getResources().getDrawable(R.mipmap.file_common); // 图片实际的对象类型为BitmapDrawable
+            BitmapDrawable commonFileIcon = (BitmapDrawable) context.getResources().getDrawable(R.mipmap.selector_file); // 图片实际的对象类型为BitmapDrawable
 
             if (fileExtensionString.length() > 5) {
                 return commonFileIcon;

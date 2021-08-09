@@ -6,16 +6,15 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.View
 import com.xing.gfox.base.activity.HLBaseActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import com.xing.gfox.hardware.netWork.U_net
 import com.xing.gfox.log.ViseLog
 import com.xing.gfox.rxHttp.download.DownloadListener
 import com.xing.gfox.rxHttp.download.FileDownloadManager
 import com.xing.gfox.rxHttp.download.FileDownloadService
 import com.xing.gfox.util.U_file
-import com.xing.gfox.util.U_string
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 class Net2Activity : HLBaseActivity() {
@@ -45,7 +44,7 @@ class Net2Activity : HLBaseActivity() {
         })
         instance.startDownload(
             "下载地址",
-            U_file.DOWNLOADS + File.separator + U_string.getFileNameFromUrl("下载地址")
+            U_file.DOWNLOADS + File.separator + U_file.getFileNameFromUrl("下载地址")
         )
     }
 

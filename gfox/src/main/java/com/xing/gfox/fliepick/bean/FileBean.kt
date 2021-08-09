@@ -3,6 +3,7 @@ package com.xing.gfox.fliepick.bean
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.xing.gfox.util.U_uri
 import java.io.File
 import java.io.Serializable
 import java.util.*
@@ -23,18 +24,16 @@ class FileBean : Serializable, Comparable<FileBean?> {
     }
 
     //文件
-    var filePath = ""//路径
-    var filePathUri: Uri? = null //路径uri
-    var mediaId = ""//文件资源id
+    var filePath: String? = ""//路径
+    var filePathUri: Uri? = U_uri.str2Uri(filePath) //路径uri
+    var mediaId: String? = ""//文件资源id
     var fileSize = 0L//文件大小
-    var fileDate = 0L //文件修改日期
-    var iconId = 0//文件图片资源的id，drawable或mipmap文件中已经存放doc、xml、xls等文件的图片
-    var fileName = ""//文件名
-    var fileMimeType = ""//文件类型
-    var title = ""//标题
-    var thumbPath = ""//封面
-    var tag: Any? = null//tag
-    var select = false
+    var fileModifiedDate = 0L //文件修改日期
+    var fileCreateDate = 0L //文件创建日期
+    var fileName: String? = ""//文件名
+    var fileMimeType: String? = ""//文件类型
+    var title: String? = ""//标题
+
     var imgFileBean: ImgFileBean? = null
         get() {
             if (field == null) {
@@ -59,36 +58,32 @@ class FileBean : Serializable, Comparable<FileBean?> {
 
     fun setImgInfo(width: Int, height: Int) {
         imgFileBean = ImgFileBean()
-        imgFileBean!!.imgWidth = width
-        imgFileBean!!.imgHeight = height
+        imgFileBean?.imgWidth = width
+        imgFileBean?.imgHeight = height
     }
 
     fun setMusicInfo(
-        artist: String,
+        artist: String? = "",
         mediaDuration: Long,
-        musicAlbum: String,
-        musicAlbumId: Int,
-        musicName: String,
-        type: String,
-        year: String,
-        pinyin: String
+        musicAlbum: String? = "",
+        musicAlbumId: Long,
+        year: Int,
+        musicName: String? = "",
     ) {
         musicFileBean = MusicFileBean()
-        musicFileBean!!.artist = artist
-        musicFileBean!!.mediaDuration = mediaDuration
-        musicFileBean!!.musicAlbum = musicAlbum
-        musicFileBean!!.musicAlbumId = musicAlbumId
-        musicFileBean!!.musicName = musicName
-        musicFileBean!!.type = type
-        musicFileBean!!.year = year
-        musicFileBean!!.pinyin = pinyin
+        musicFileBean?.artist = artist
+        musicFileBean?.mediaDuration = mediaDuration
+        musicFileBean?.musicAlbum = musicAlbum
+        musicFileBean?.musicAlbumId = musicAlbumId
+        musicFileBean?.year = year
+        musicFileBean?.musicName = musicName
     }
 
     fun setVideoInfo(width: Int, height: Int, mediaDuration: Long) {
         videoFileBean = VideoFileBean()
-        videoFileBean!!.vWidth = width
-        videoFileBean!!.vHeight = height
-        videoFileBean!!.mediaDuration = mediaDuration
+        videoFileBean?.vWidth = width
+        videoFileBean?.vHeight = height
+        videoFileBean?.mediaDuration = mediaDuration
     }
 
     override fun compareTo(o: FileBean?): Int {
@@ -119,16 +114,19 @@ class FileBean : Serializable, Comparable<FileBean?> {
         var mediaDuration = 0L//視頻長度
         var vWidth = 0
         var vHeight = 0
+        var thumbPath: String? = ""//封面
     }
 
     class MusicFileBean {
         var mediaDuration = 0L
-        var musicName = "" //歌曲名
-        var musicAlbum = ""//所属专辑
-        var musicAlbumId = 0//所属专辑id
-        var artist = ""//艺术家(作者)
-        var type = ""//类型
-        var year = ""//发行日期
-        var pinyin = ""
+        var musicName: String? = "" //歌曲名
+        var musicAlbum: String? = ""//所属专辑
+        var musicAlbumId = 0L//所属专辑id
+        var artist: String? = ""//艺术家(作者)
+        var year = 0//发行日期
     }
+
+    //adapter使用
+    var tag: Any? = null//tag
+    var select = false//是否选择
 }

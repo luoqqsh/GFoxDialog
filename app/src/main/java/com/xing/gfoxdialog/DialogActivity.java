@@ -1,42 +1,52 @@
 package com.xing.gfoxdialog;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
 import com.xing.gfox.base.dialog.NDialog;
-import com.xing.gfox.base.interfaces.HOnListener;
 import com.xing.gfox.base.interfaces.OnSimpleListener;
+import com.xing.gfox.base.interfaces.ProgressListener;
+import com.xing.gfox.base.toast.U_Toast;
 import com.xing.gfox.dialog.CBottomListDialog;
 import com.xing.gfox.dialog.CFileListDialog;
 import com.xing.gfox.dialog.CProgressDialog;
 import com.xing.gfox.dialog.CTipDialog;
 import com.xing.gfox.dialog.CWaitingDialog;
 import com.xing.gfox.fliepick.bean.CPickType;
-import com.xing.gfox.fliepick.bean.FileBean;
 import com.xing.gfox.fliepick.media.CMediaPickDialog;
-import com.xing.gfox.fliepick.media.CMediaPickDialog2;
 import com.xing.gfox.fliepick.media.CSystemPickDialog;
-import com.xing.gfox.fliepick.media.MediaConfig;
 import com.xing.gfox.log.ViseLog;
-import com.xing.gfox.media.U_mediaList;
+import com.xing.gfox.media.U_media;
+import com.xing.gfox.rxHttp.li.livedata.BaseObserverCallBack;
 import com.xing.gfox.rxHttp.task.TaskDelayBManager;
 import com.xing.gfox.util.U_file;
+import com.xing.gfox.util.U_http;
 import com.xing.gfoxdialog.BaseApp.BaseActivity;
+import com.xing.gfoxdialog.api.BaseObserver;
+import com.xing.gfoxdialog.api.TestEnv;
+import com.xing.gfoxdialog.databinding.ActivityDialogBinding;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 public class DialogActivity extends BaseActivity {
+    ActivityDialogBinding binding;
+
     @Override
-    protected int getBackgroundColorResource() {
-        return R.color.white;
+    public View getLayoutView() {
+        binding = ActivityDialogBinding.inflate(getLayoutInflater());
+        return binding.getRoot();
     }
 
     @Override
-    public int getLayoutId() {
-        return R.layout.activity_dialog;
+    protected int getBackgroundColorResource() {
+        return R.color.white;
     }
 
     @Override
@@ -46,7 +56,7 @@ public class DialogActivity extends BaseActivity {
 
     @Override
     public void initUI(Bundle savedInstanceState) {
-        mTitle.setLeftButtonImage(R.mipmap.hl_back_black, v -> finish());
+        mTitle.setLeftButtonImage(R.mipmap.back_black, v -> finish());
         mTitle.setTitleText("对话框");
     }
 
@@ -95,9 +105,9 @@ public class DialogActivity extends BaseActivity {
 
     //系统自带选择图片、视频弹窗
     public void systemDialog(View view) {
-        CSystemPickDialog.builder().setNeedCrop(true).setOnSingleListener(it -> {
+        CSystemPickDialog.builder().setNeedCrop(false).setOnSingleListener(it -> {
             ViseLog.d(it);
-        }).startPick(mActivity, CPickType.images);
+        }).startPick(mActivity, CPickType.videos);
     }
 
     //进度弹窗
@@ -116,28 +126,13 @@ public class DialogActivity extends BaseActivity {
 
     //自定义多选弹窗
     public void diyDialog(View view) {
-        U_mediaList.getLocalImgFromLoader(mActivity, mediaFolderMap -> {
-            ViseLog.d("mediaFolderMap");
-            ViseLog.d(mediaFolderMap);
-            U_mediaList.getMediaFromLoaderByPage(mActivity, MediaConfig.imgType, "", 1, 20, CPickType.images, new HOnListener<List<FileBean>>() {
-                @Override
-                public void onListen(List<FileBean> fileBeans) {
-                    ViseLog.d(fileBeans);
-                }
-            });
-        });
-//        CMediaPickDialog2.builder().addTip(mActivity, "123")
-//                .setNeedPreview(false)
-//                .setShowCamera(false)
-//                .setOnMoreSelectListener(info -> {
-//                    ViseLog.d(info);
-//                })
-//                .startSelectImg(mActivity);
         CMediaPickDialog.builder().addTip(mActivity, "123")
-                .setNeedPreview(false)
-                .setShowCamera(false)
+                .setNeedPreview(true)
+                .setShowCamera(true)
                 .setOnMoreSelectListener(info -> {
                     ViseLog.d(info);
+//                    upLoadImg(info.get(0).getFilePathUri());
+//                    GlideUtil.instance().setDefaultImage(mActivity, info.get(0).getFilePathUri(), binding.imgimg);
                 })
                 .startSelectImg(mActivity);
     }
@@ -154,9 +149,46 @@ public class DialogActivity extends BaseActivity {
         cBottomListDialog.showDialog(mActivity);
     }
 
+    //文件选择对话框，来自第三方
     public void fileDialog(View view) {
         CFileListDialog c = new CFileListDialog();
         c.setPath(U_file.SDROOT);
         c.showDialog(mActivity);
+    }
+
+    public void upLoadImg(Uri uri) {
+        TestEnv.getUploadApi().uploadHead("user/uploadHead", U_http.uriToMultipartRequestBody("file", uri, new ProgressListener() {
+            @Override
+            public void onProgress(long progress) {
+                U_Toast.show(progress);
+            }
+        })).observe(mActivity, new BaseObserver<>(new BaseObserverCallBack<String>() {
+            @Override
+            public void onSuccess(String data) {
+                ViseLog.d(data);
+            }
+
+            @Override
+            public void onFail(String msg) {
+                super.onFail(msg);
+                ViseLog.d(msg);
+            }
+        }));
+    }
+
+    public void musicDialog(View view) {
+        File file = new File(U_file.DOWNLOADS);
+        if (!file.exists()) {
+            return;
+        }
+        File[] a = file.listFiles();
+        if (a == null) return;
+        List<File> fileListSort = new ArrayList<>(Arrays.asList(a));
+        for (int i = 0; i < fileListSort.size(); i++) {
+            if (U_file.isFileExist(fileListSort.get(i))) {
+                U_media.updateMedia(mActivity, fileListSort.get(i).getAbsolutePath());
+            }
+        }
+        ViseLog.d("刷新音乐完成");
     }
 }

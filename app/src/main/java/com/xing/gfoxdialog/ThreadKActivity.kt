@@ -21,7 +21,7 @@ class ThreadKActivity : HKBaseActivity() {
     }
 
     override fun initUI(savedInstanceState: Bundle) {
-        mTitle.setLeftButtonImage(R.mipmap.hl_back_black) { v: View? -> finish() }
+        mTitle.setLeftButtonImage(R.mipmap.back_black) { v: View? -> finish() }
         mTitle.setTitleText("线程协程")
     }
 

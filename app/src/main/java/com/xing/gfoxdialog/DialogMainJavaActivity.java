@@ -41,7 +41,7 @@ public class DialogMainJavaActivity extends BaseActivity {
 
     private void init() {
         mTitle.setTitleText("Java版本首页");
-        mTitle.setLeftButtonImage(R.mipmap.hl_back_white, v -> finish());
+        mTitle.setLeftButtonImage(R.mipmap.back_white, v -> finish());
         findViewById(R.id.mainDialog).setOnClickListener(v -> startActivity(new Intent(mActivity, DialogActivity.class)));
         findViewById(R.id.mainJava).setVisibility(View.GONE);
         findViewById(R.id.mainPlayer).setOnClickListener(view -> startActivity(new Intent(mActivity, HHMedia3Activity.class)));

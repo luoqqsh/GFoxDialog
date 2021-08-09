@@ -32,7 +32,7 @@ public class ToastActivity extends BaseActivity {
 
     @Override
     public void initUI(Bundle savedInstanceState) {
-        mTitle.setLeftButtonImage(R.mipmap.hl_back_black, v -> finish());
+        mTitle.setLeftButtonImage(R.mipmap.back_black, v -> finish());
         mTitle.setTitleText("Toast");
     }
 

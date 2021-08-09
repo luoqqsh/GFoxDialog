@@ -38,7 +38,7 @@ public class NotificationActivity extends BaseActivity {
                 //设置左上角小图标
                 .setSmallIcon(R.mipmap.ic_launcher)
                 //设置右侧大图标
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_error))
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.state_error))
                 //设置跳转
                 .setContextIntent(null)
                 //传入通知id，可以不传，id相同会覆盖
@@ -69,7 +69,7 @@ public class NotificationActivity extends BaseActivity {
                 .setDefaults(Notification.DEFAULT_ALL)//设置提醒方式
                 .setType(NotificationHelper.NOTIFICATION_TYPE_NORMAL)//通知类型
                 .setSmallIcon(R.mipmap.ic_launcher)//
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon_error))
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.state_error))
                 .setAutoCancel(true)//true点击自动删除，false滑动才能删除
                 .setOngoing(true)//正在进行的通知，禁止滑动删除
                 .setBigTextStyle("大标题", "展开的内展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容展开的内容")

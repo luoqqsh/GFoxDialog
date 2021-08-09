@@ -14,6 +14,7 @@ import com.xing.gfox.R;
 import com.xing.gfox.base.dialog.BaseNDialog;
 import com.xing.gfox.base.toast.U_Toast;
 import com.xing.gfox.fliepick.bean.CPickType;
+import com.xing.gfox.fliepick.bean.FileBean;
 import com.xing.gfox.media.U_media;
 import com.xing.gfox.util.U_file;
 import com.xing.gfox.util.U_permissions;
@@ -22,9 +23,6 @@ import com.xing.gfox.util.U_time;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import com.xing.gfox.fliepick.bean.FileBean;
 
 public abstract class BasePickDialog extends BaseNDialog {
     protected List<FileBean> mFileList = new ArrayList<>();//数据
@@ -53,7 +51,7 @@ public abstract class BasePickDialog extends BaseNDialog {
             }
 
             @Override
-            public void requestPermissionFail(Map<String, Boolean> failPermission) {
+            public void requestPermissionFail(List<String> failPermission) {
                 dismiss();
             }
         });
@@ -121,7 +119,7 @@ public abstract class BasePickDialog extends BaseNDialog {
             }
 
             @Override
-            public void requestPermissionFail(Map<String, Boolean> failPermission) {
+            public void requestPermissionFail(List<String> failPermission) {
                 U_Toast.show(mActivitys.get().getString(R.string.no_camera_permission));
                 dismiss();
             }

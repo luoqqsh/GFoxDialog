@@ -1,5 +1,6 @@
 package com.xing.gfox.util;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
@@ -11,20 +12,15 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.widget.Toast;
 
-import androidx.annotation.RequiresPermission;
+import com.xing.gfox.R;
+import com.xing.gfox.base.toast.U_Toast;
+import com.xing.gfox.log.ViseLog;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.INTERNET;
-
-import com.xing.gfox.log.ViseLog;
 
 public class U_location {
     private static OnLocationChangeListener mListener;
@@ -79,16 +75,27 @@ public class U_location {
      * @param listener    位置刷新的回调接口
      * @return {@code true}: 初始化成功<br>{@code false}: 初始化失败
      */
-    @RequiresPermission(allOf = {ACCESS_FINE_LOCATION, INTERNET, ACCESS_COARSE_LOCATION})
     public static boolean register(Context context, long minTime, long minDistance, OnLocationChangeListener listener) {
+        if (mLocationManager == null)
+            mLocationManager = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        String provider = mLocationManager.getBestProvider(getCriteria(), true);
+        return register(context, provider, minTime, minDistance, listener);
+    }
+
+    public static boolean register(Context context, String provider, long minTime, long minDistance, OnLocationChangeListener listener) {
         if (listener == null) return false;
-        mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        mListener = listener;
-        if (!isLocationEnabled(context)) {
-            Toast.makeText(context, "无法定位，请打开定位服务", Toast.LENGTH_LONG).show();
+        if (!U_permissions.checkPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) ||
+                !U_permissions.checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            U_Toast.show(context.getString(R.string.no_location_permission));
             return false;
         }
-        String provider = mLocationManager.getBestProvider(getCriteria(), true);
+        if (!isLocationEnabled(context)) {
+            U_Toast.show(context.getString(R.string.no_location));
+            return false;
+        }
+        if (mLocationManager == null)
+            mLocationManager = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        mListener = listener;
         Location location = mLocationManager.getLastKnownLocation(provider);
         if (location != null) listener.getLastKnownLocation(location);
         if (myLocationListener == null) myLocationListener = new MyLocationListener();
@@ -96,17 +103,16 @@ public class U_location {
         return true;
     }
 
-
     /**
      * 注销
      */
-    @RequiresPermission(allOf = {ACCESS_FINE_LOCATION, INTERNET, ACCESS_COARSE_LOCATION})
     public static void unregister() {
         if (mLocationManager != null) {
             if (myLocationListener != null) {
                 mLocationManager.removeUpdates(myLocationListener);
                 myLocationListener = null;
             }
+            mListener = null;
             mLocationManager = null;
         }
     }

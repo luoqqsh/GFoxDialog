@@ -57,7 +57,7 @@ class FileDownloadManager(context: Context) {
                 }
             }
 
-            override fun requestPermissionFail(map: Map<String, Boolean>) {
+            override fun requestPermissionFail(failPermission: MutableList<String>?) {
                 ViseLog.e("没有文件读写权限")
                 if (downloadListener != null) {
                     downloadListener!!.onDownLoadError(resultFilePath, "没有文件读写权限")

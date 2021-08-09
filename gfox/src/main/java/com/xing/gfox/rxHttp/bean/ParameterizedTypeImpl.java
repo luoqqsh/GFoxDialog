@@ -7,7 +7,9 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 
 /**
+ * 获取包含泛型的bean类型
  * 参考：https://blog.csdn.net/weixin_34256074/article/details/91431816
+ * 使用例子：new ParameterizedTypeImpl(ResBody.class, String.class));
  */
 public class ParameterizedTypeImpl implements ParameterizedType {
     private final Type rawType;

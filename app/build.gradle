@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    compileSdkPreview "android-S"
+    compileSdk 31
     buildToolsVersion "30.0.3"
     ndkVersion '22.1.7171670'
     defaultConfig {
@@ -80,30 +80,30 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'//原来的design
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'com.google.android.material:material:1.4.0'//原来的design
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation project(':gfox')
     implementation project(':gfox-glide')
-    implementation('com.airbnb.android:lottie:3.5.0') {
+    implementation('com.airbnb.android:lottie:3.7.0') {
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
 
 //    implementation 'com.github:cvplayer-core:1.0.5'
 //    implementation 'com.github:cvplayer-ijk:1.0.0'
-    implementation 'io.github.luoqqsh:cvplayer:1.0.0'
+    implementation 'io.github.luoqqsh:cvplayer:1.0.1'
     implementation 'io.github.luoqqsh:cvplayer-ijk:1.0.1'
     implementation 'io.github.luoqqsh:cvplayer-ali:1.0.1'
 //    implementation 'io.github.lizhangqu:retrace:1.0.2'

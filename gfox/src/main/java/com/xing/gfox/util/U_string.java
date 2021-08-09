@@ -144,12 +144,6 @@ public class U_string {
         return result;
     }
 
-    //获取url里的/后面的文件名
-    public static String getFileNameFromUrl(String url) {
-        int index = url.lastIndexOf("/");
-        return url.substring(index + 1);
-    }
-
     //判断是否是json数据
     public static boolean isJson(String str) {
         if (TextUtils.isEmpty(str)) return false;
@@ -180,5 +174,16 @@ public class U_string {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 判断 c 是否是 16 进制的字符
+     *
+     * @param c 需要判断的字符
+     * @return 返回 `true` 为 16 进制的字符
+     */
+    public static boolean isValidHexChar(char c) {
+        String regex = "^[A-Fa-f0-9]+$";
+        return String.valueOf(c).matches(regex);
     }
 }

@@ -1,7 +1,6 @@
 package com.xing.gfox.util;
 
 import android.content.ContentValues;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -48,13 +47,6 @@ public class U_img {
     }
 
     /**
-     * #5bc0de值转为颜色值
-     */
-    public static int getColorFromString(String color) {
-        return Color.parseColor(color);
-    }
-
-    /**
      * 创建一条图片地址uri,用于保存拍照后的照片
      *
      * @return 图片的uri
@@ -79,8 +71,7 @@ public class U_img {
     public static File createImageFile() {
         String timeStamp = new SimpleDateFormat(U_time.yyyyMMdd_HHmmss, Locale.getDefault()).format(new Date());
         String imageFileName = String.format("JPEG_%s.jpg", timeStamp);
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         if (!storageDir.exists()) {
             storageDir.mkdir();
         }

@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <LinearLayout
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <ImageView
-            android:layout_marginLeft="10dp"
-            android:padding="3dp"
-            android:id="@+id/file_icon"
+            android:id="@+id/sFileThumb"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@mipmap/fx_qq" />
+            android:layout_marginStart="5dp"
+            tools:src="@mipmap/fx_qq" />
 
         <TextView
-            android:id="@+id/file_path"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity=""
-            android:layout_marginLeft="12dp"
-            android:gravity="center|left"
-            android:text="xxxxxxxxxx.xx"
-            android:textSize="16dp"/>
+            android:id="@+id/sFileName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            tools:text="test.mp4" />
+
+        <ImageView
+            android:id="@+id/sFileState"
+            android:layout_width="@dimen/dp25"
+            android:layout_height="@dimen/dp25"
+            android:layout_gravity="center"
+            android:src="@mipmap/selector_unselect" />
     </LinearLayout>
 
-
+    <ImageView
+        android:id="@+id/sFileMasking"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:background="#111212" />
 </LinearLayout>

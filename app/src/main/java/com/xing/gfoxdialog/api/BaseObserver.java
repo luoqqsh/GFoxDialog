@@ -1,13 +1,17 @@
 package com.xing.gfoxdialog.api;
 
+import androidx.lifecycle.Observer;
 
-import com.xing.gfox.rxHttp.li.bean.ApiResponse;
 import com.xing.gfox.rxHttp.li.livedata.BaseObserverCallBack;
-import com.xing.gfox.rxHttp.li.livedata.IBaseObserver;
 
-public class BaseObserver<T> implements IBaseObserver<T> {
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 
-    private BaseObserverCallBack<T> baseObserverCallBack;
+import okhttp3.Response;
+
+public class BaseObserver<T> implements Observer<T> {
+
+    private final BaseObserverCallBack<T> baseObserverCallBack;
 
     public BaseObserver(BaseObserverCallBack<T> baseObserverCallBack) {
         this.baseObserverCallBack = baseObserverCallBack;
@@ -15,21 +19,48 @@ public class BaseObserver<T> implements IBaseObserver<T> {
 
     @Override
     public void onChanged(T t) {
-        if (t instanceof ApiResponse) {
-            ApiResponse apiResponse = (ApiResponse) t;
+        if (t instanceof BaseApiResponse) {
+            BaseApiResponse apiResponse = (BaseApiResponse) t;
             if (apiResponse.isSuccess()) {
-                baseObserverCallBack.onSuccess(t);
-            } else {
-                baseObserverCallBack.onFail(apiResponse.getErrorMsg());
-
-                if (baseObserverCallBack.showErrorMsg()) {
-//                    Toast.makeText(app.getInstance().getApp(), apiResponse.getErrorMsg(), Toast.LENGTH_SHORT).show();
-//                    PopUtil.show(apiResponse.getErrorMsg());
+                if (apiResponse.isSuccess()) {
+                    baseObserverCallBack.onSuccess(t);
+                } else {
+                    baseObserverCallBack.onFail(apiResponse.getErrorMsg());
                 }
             }
+        } else if (t instanceof Response) {
+            Response response = (Response) t;
+            String text;
+            switch (response.code()) {
+                case 403:
+                    text = "403:服务器拒绝";
+                    break;
+                case 404:
+                    text = "404:服务器连接失败";
+                    break;
+                case 500:
+                    text = "500:服务器错误";
+                    break;
+                case 504:
+                    text = "504:缓存获取失败";
+                    break;
+                default:
+                    text = String.valueOf(response.code());
+                    break;
+            }
+            baseObserverCallBack.onFail(text);
+        } else if (t instanceof Throwable) {
+            ((Throwable) t).printStackTrace();
+            if (t instanceof ConnectException) {
+                baseObserverCallBack.onFail("异常:服务器连接失败");
+            } else if (t instanceof UnknownHostException) {
+                baseObserverCallBack.onFail("异常:域名解析失败");
+            } else {
+                baseObserverCallBack.onFail(((Throwable) t).getMessage());
+            }
+            baseObserverCallBack.onThrowable((Throwable) t);
         } else {
-            baseObserverCallBack.onSuccess(t);
-//            baseObserverCallBack.onFail("!");
+            baseObserverCallBack.onSuccess(String.valueOf(t));
         }
         baseObserverCallBack.onFinish();
     }

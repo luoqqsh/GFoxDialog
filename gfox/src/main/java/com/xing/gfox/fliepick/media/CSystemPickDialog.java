@@ -10,15 +10,14 @@ import android.view.View;
 
 import androidx.fragment.app.FragmentActivity;
 
-import java.util.Map;
-
 import com.xing.gfox.base.toast.U_Toast;
 import com.xing.gfox.fliepick.bean.CPickType;
 import com.xing.gfox.fliepick.bean.FileBean;
-
 import com.xing.gfox.fliepick.bean.MediaSelectListener;
 import com.xing.gfox.util.U_device;
 import com.xing.gfox.util.U_permissions;
+
+import java.util.List;
 
 public class CSystemPickDialog extends BasePickDialog {
 
@@ -152,7 +151,7 @@ public class CSystemPickDialog extends BasePickDialog {
                         }
                         dialog.get().startActivityForResult(intent, chooseType);
                         break;
-                    case CPickType.music://获取相册中的音乐
+                    case CPickType.audios://获取相册中的音乐
                         intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
                         dialog.get().startActivityForResult(intent, chooseType);
                         break;
@@ -172,7 +171,7 @@ public class CSystemPickDialog extends BasePickDialog {
             }
 
             @Override
-            public void requestPermissionFail(Map<String, Boolean> failPermission) {
+            public void requestPermissionFail(List<String> failPermission) {
                 U_Toast.show("缺少相关权限，请到设置里授权！");
                 dismiss();
             }
