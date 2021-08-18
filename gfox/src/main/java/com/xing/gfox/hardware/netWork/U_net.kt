@@ -1,23 +1,18 @@
 package com.xing.gfox.hardware.netWork
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.net.NetworkInfo
 import android.os.Build
 import android.provider.Settings
-import android.telephony.PhoneStateListener
-import android.telephony.TelephonyDisplayInfo
 import android.telephony.TelephonyManager
 import com.xing.gfox.base.activity.HLBaseActivity
-import com.xing.gfox.log.ViseLog
-import com.xing.gfox.util.U_permissions
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import com.xing.gfox.base.interfaces.HOnListener
+import com.xing.gfox.rxHttp.U_http
+import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -27,7 +22,6 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
-import java.util.concurrent.TimeUnit
 
 /**
  * 网络连接状态的监听器。通过注册broadcast实现的
@@ -73,48 +67,99 @@ class U_net {
             return line
         }
 
+        @JvmStatic
         fun canConnGoogle(): Boolean {
-            val okHttpClient =
-                OkHttpClient().newBuilder().connectTimeout(2, TimeUnit.SECONDS).build()
-            val request: Request = Request.Builder().url("https://www.google.com").build()
-            try {
-                okHttpClient.newCall(request).execute()
-                    .use { response -> return response.isSuccessful }
-            } catch (e: Exception) {
-                return false
+            val response = U_http.sendGetRequest("https://www.google.com", null)
+            return response?.isSuccessful ?: false
+        }
+
+        //获取网络类型
+        @JvmStatic
+        fun getNetworkType(mContext: Context): String {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                getNetType(mContext)
+            } else {
+                getNetTypeOld(mContext)
             }
         }
 
-        //判断是否是5G网络
-        fun getNetworkType(mContext: Context) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val tManager =
-                    mContext.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                tManager.listen(object : PhoneStateListener() {
-                    override fun onDisplayInfoChanged(telephonyDisplayInfo: TelephonyDisplayInfo) {
-                        if (U_permissions.checkPermission(
-                                mContext,
-                                Manifest.permission.READ_PHONE_STATE
-                            )
-                        ) {
-                            super.onDisplayInfoChanged(telephonyDisplayInfo)
-                            when (telephonyDisplayInfo.networkType) {
-                                TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_LTE_ADVANCED_PRO -> ViseLog.d(
-                                    "高级专业版 LTE (5Ge)"
-                                )
-                                TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA -> ViseLog.d("NR (5G) - 5G Sub-6 网络")
-                                TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA_MMWAVE -> ViseLog.d(
-                                    "5G+/5G UW - 5G mmWave 网络"
-                                )
-                                else -> ViseLog.d("other")
-                            }
-                        }
-                    }
-                }, PhoneStateListener.LISTEN_DISPLAY_INFO_CHANGED)
+        private fun getNetType(mContext: Context): String {
+            val cm = mContext
+                .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val capabilities: NetworkCapabilities = cm.getNetworkCapabilities(cm.getActiveNetwork())
+                ?: return NetWorkType.NO
+            when {
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> {
+                    return NetWorkType.VPN
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                    return NetWorkType.WIFI
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI_AWARE) -> {
+                    return NetWorkType.WIFI
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> {
+                    return NetWorkType.BLUETOOTH
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_LOWPAN) -> {
+                    return NetWorkType.LOWPAN
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
+                    return NetWorkType.ETHERNET
+                }
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                    val tm = mContext
+                        .getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                    return getMobileType(tm.dataNetworkType)
+                }
+            }
+            return NetWorkType.UNKNOWN
+        }
+
+        private fun getNetTypeOld(mContext: Context): String {
+            val cm = mContext
+                .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo: NetworkInfo = cm.activeNetworkInfo!!
+            return if (networkInfo.isConnectedOrConnecting) {
+                when (networkInfo.type) {
+                    ConnectivityManager.TYPE_VPN -> NetWorkType.VPN
+                    ConnectivityManager.TYPE_ETHERNET -> NetWorkType.ETHERNET
+                    ConnectivityManager.TYPE_BLUETOOTH -> NetWorkType.BLUETOOTH
+                    ConnectivityManager.TYPE_WIFI -> NetWorkType.WIFI
+                    ConnectivityManager.TYPE_MOBILE -> getMobileType(networkInfo.subtype)
+                    else -> NetWorkType.UNKNOWN
+                }
+            } else {
+                NetWorkType.NO
+            }
+        }
+
+        private fun getMobileType(type: Int): String {
+            return when (type) {
+                TelephonyManager.NETWORK_TYPE_GPRS,
+                TelephonyManager.NETWORK_TYPE_CDMA,
+                TelephonyManager.NETWORK_TYPE_GSM,
+                TelephonyManager.NETWORK_TYPE_EDGE,
+                TelephonyManager.NETWORK_TYPE_1xRTT,
+                TelephonyManager.NETWORK_TYPE_IDEN -> NetWorkType.Mobile2G
+                TelephonyManager.NETWORK_TYPE_EVDO_A,
+                TelephonyManager.NETWORK_TYPE_UMTS,
+                TelephonyManager.NETWORK_TYPE_EVDO_0,
+                TelephonyManager.NETWORK_TYPE_HSDPA,
+                TelephonyManager.NETWORK_TYPE_HSUPA,
+                TelephonyManager.NETWORK_TYPE_TD_SCDMA,
+                TelephonyManager.NETWORK_TYPE_HSPA,
+                TelephonyManager.NETWORK_TYPE_EVDO_B,
+                TelephonyManager.NETWORK_TYPE_EHRPD,
+                TelephonyManager.NETWORK_TYPE_HSPAP -> NetWorkType.Mobile3G
+                TelephonyManager.NETWORK_TYPE_LTE -> NetWorkType.Mobile4G
+                TelephonyManager.NETWORK_TYPE_NR -> NetWorkType.Mobile5G
+                else -> NetWorkType.UNKNOWN
             }
         }
 
         //是不是按流量计费
+        @JvmStatic
         fun isNotFlowPay(mContext: Context) {
             val manager =
                 mContext.getSystemService(HLBaseActivity.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -126,7 +171,6 @@ class U_net {
                         networkCapabilities: NetworkCapabilities
                     ) {
                         super.onCapabilitiesChanged(network, networkCapabilities)
-
                         //true 代表连接不按流量计费
                         val isNotFlowPay =
                             networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED) ||
@@ -136,92 +180,166 @@ class U_net {
             }
         }
 
+        @JvmStatic
+        fun isNetConnectedByPingBaidu(): Boolean {
+            return isNetConnectedByPing("www.baidu.com")
+        }
+
+        @JvmStatic
+        fun isNetConnectedByPing(address: String): Boolean {
+            return try {
+                // 通过ping百度检测网络是否可用
+                val p = Runtime.getRuntime().exec("/system/bin/ping -c 1 $address")
+                val status = p.waitFor() // 只有0时表示正常返回
+                status == 0
+            } catch (e: IOException) {
+                e.printStackTrace()
+                false
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                false
+            }
+        }
+
         /**
          * 判断网络是否连接
          */
-        fun isNetworkConnected(context: Context?): Boolean {
-            if (context != null) {
-                val mConnectivityManager = context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    val mNetworkInfo = mConnectivityManager.activeNetworkInfo
-                    if (mNetworkInfo != null) {
-                        return mNetworkInfo.isAvailable
-                    }
-                } else {
-                    val network = mConnectivityManager.activeNetwork ?: return false
-                    val status = mConnectivityManager.getNetworkCapabilities(network)
-                        ?: return false
-                    if (status.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
-                        return true
-                    }
-                }
-            }
-            return false
+        @JvmStatic
+        fun isNetworkConnected(context: Context): Boolean {
+            return getNetworkType(context) != NetWorkType.NO
         }
 
         /**
          * 判断是否是WiFi连接
          */
-        fun isWifiConnected(context: Context?): Boolean {
-            if (context != null) {
-                val mConnectivityManager = context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    val mWiFiNetworkInfo = mConnectivityManager
-                        .getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                    if (mWiFiNetworkInfo != null) {
-                        return mWiFiNetworkInfo.isAvailable
-                    }
-                } else {
-                    val network = mConnectivityManager.activeNetwork ?: return false
-                    val status = mConnectivityManager.getNetworkCapabilities(network)
-                        ?: return false
-                    if (status.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                        return true
-                    }
-                }
-            }
-            return false
+        @JvmStatic
+        fun isWifiConnected(context: Context): Boolean {
+            return getNetworkType(context) == NetWorkType.WIFI
         }
 
         /**
          * 判断是否是数据网络连接
          */
-        fun isMobileConnected(context: Context?): Boolean {
-            if (context != null) {
-                val mConnectivityManager = context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    val mMobileNetworkInfo = mConnectivityManager
-                        .getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-                    if (mMobileNetworkInfo != null) {
-                        return mMobileNetworkInfo.isAvailable
-                    }
-                } else {
-                    val network = mConnectivityManager.activeNetwork ?: return false
-                    val status = mConnectivityManager.getNetworkCapabilities(network)
-                        ?: return false
-                    status.transportInfo
-                    if (status.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                        return true
-                    }
-                }
-            }
-            return false
+        @JvmStatic
+        fun isMobileConnected(context: Context): Boolean {
+            val networkType = getNetworkType(context)
+            return networkType == NetWorkType.Mobile2G ||
+                    networkType == NetWorkType.Mobile3G ||
+                    networkType == NetWorkType.Mobile4G ||
+                    networkType == NetWorkType.Mobile5G
         }
 
+        @JvmStatic
         fun gotoWIFISet(context: Context) {
             val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
             context.startActivity(intent)
         }
 
-        fun downloadImg(downloadUrl: String): Bitmap {
-            val url = URL(downloadUrl)
-            val conn = url.openConnection() as HttpURLConnection
-            val bitmap = BitmapFactory.decodeStream(conn.inputStream)
-            conn.disconnect()
-            return bitmap
+        @JvmStatic
+        fun longToIp(ip: Long): String {
+            return (ip and 0xFF).toString() + "." +
+                    (ip shr 8 and 0xFF) + "." +
+                    (ip shr 16 and 0xFF) + "." +
+                    (ip shr 24 and 0xFF)
+        }
+
+        @JvmStatic
+        fun ipToLong(ipAddress: String): Long {
+            var result: Long = 0
+            val ipAddressInArray = ipAddress.split("\\.".toRegex()).toTypedArray()
+            for (i in 3 downTo 0) {
+                val ip = ipAddressInArray[3 - i].toLong()
+                //left shifting 24,16,8,0 and bitwise OR
+                //1. 192 << 24
+                //1. 168 << 16
+                //1. 1   << 8
+                //1. 2   << 0
+                result = result or (ip shl i * 8)
+            }
+            return result
+        }
+
+        /**
+         * 根据域名获取ip
+         * 通过阿里公用dns接口
+         */
+        @JvmStatic
+        fun getIpByHost(hostName: String): String {
+            val response = U_http.sendGetRequest(
+                "https://223.5.5.5/resolve?name=$hostName", null
+            )
+            if (response != null) {
+                val content = U_http.getBodyFromResponse(response)
+                return try {
+                    val status = JSONObject(content).getInt("Status")
+                    if (status == 0) {
+                        val answer = JSONObject(content).getJSONArray("Answer")
+                        answer.getJSONObject(0).getString("data")
+                    } else {
+                        ""
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    ""
+                }
+            } else {
+                return ""
+            }
+        }
+
+        /**
+         * 根据域名获取ip
+         * 通过阿里公用dns接口
+         */
+        @JvmStatic
+        fun getIpByHost(hostName: String, listener: HOnListener<String>?) {
+            U_http.sendGetRequest(
+                "https://223.5.5.5/resolve?name=$hostName", null, object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        e.printStackTrace()
+                        listener?.onListen("")
+                    }
+
+                    @Throws(IOException::class)
+                    override fun onResponse(call: Call, response: Response) {
+                        val content = U_http.getBodyFromResponse(response)
+                        try {
+                            val status = JSONObject(content).getInt("Status")
+                            if (status == 0) {
+                                val answer = JSONObject(content).getJSONArray("Answer")
+                                val data = answer.getJSONObject(0).getString("data")
+                                listener?.onListen(data)
+                            } else {
+                                listener?.onListen("")
+                            }
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                            listener?.onListen("")
+                        }
+                    }
+                })
+        }
+
+        /**
+         * 获取用户数据Agent
+         */
+        @JvmStatic
+        fun getUserAgent(): String {
+            val sb = StringBuffer()
+            val userAgent = System.getProperty("http.agent") ?: ""
+
+            var i = 0
+            val length = userAgent.length
+            while (i < length) {
+                val c = userAgent[i]
+                if (c <= '\u001f' || c >= '\u007f') {
+                    sb.append(String.format("\\u%04x", c.code))
+                } else {
+                    sb.append(c)
+                }
+                i++
+            }
+            return sb.toString()
         }
     }
 }

@@ -4,7 +4,7 @@ package com.xing.gfox.rxHttp.kotlin;
 import android.util.Log;
 
 import com.xing.gfox.log.ViseLog;
-import com.xing.gfox.rxHttp.LoggingInterceptor;
+import com.xing.gfox.rxHttp.interceptor.LoggingInterceptor;
 
 import java.io.IOException;
 import java.net.Proxy;

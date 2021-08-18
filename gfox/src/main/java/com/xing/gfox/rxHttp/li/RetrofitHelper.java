@@ -2,7 +2,7 @@ package com.xing.gfox.rxHttp.li;
 
 import androidx.annotation.NonNull;
 
-import com.xing.gfox.rxHttp.LoggingInterceptor;
+import com.xing.gfox.rxHttp.interceptor.LoggingInterceptor;
 
 import java.util.concurrent.TimeUnit;
 

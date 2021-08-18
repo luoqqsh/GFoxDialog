@@ -3,7 +3,7 @@ package com.xing.gfoxdialog.api;
 
 import androidx.annotation.NonNull;
 
-import com.xing.gfox.rxHttp.LoggingInterceptor;
+import com.xing.gfox.rxHttp.interceptor.LoggingInterceptor;
 import com.xing.gfox.rxHttp.li.RetrofitHelper;
 import com.xing.gfox.rxHttp.li.livedata.LiveDataCallAdapterFactory;
 

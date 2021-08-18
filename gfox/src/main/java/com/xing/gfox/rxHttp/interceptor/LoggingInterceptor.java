@@ -30,12 +30,14 @@ import okio.Buffer;
 import okio.BufferedSource;
 import okio.GzipSource;
 import com.xing.gfox.log.ViseLog;
+import com.xing.gfox.util.U_time;
 
 /**
  * 日志拦截器
  */
 public class LoggingInterceptor implements Interceptor {
     private volatile Level level = Level.ALL;
+    public static long serviceTimeDiff = 0L;//服务器时间差
 
     public enum Level {
         NONE, ALL, MAIN//无，所有，主要（不包含head部分）
@@ -60,12 +62,15 @@ public class LoggingInterceptor implements Interceptor {
         }
         StringBuilder urlLog = new StringBuilder();
         List<String> url = request.url().pathSegments();
-        for (String param : url) {
-            urlLog.append(param).append("/");
+        for (int i = 0; i < url.size(); i++) {
+            urlLog.append(url.get(i));
+            if (i != url.size() - 1) {
+                urlLog.append("/");
+            }
         }
         String TAG = "HttpLog";
-        StringBuilder requestlog = new StringBuilder("<=======================发起" + urlLog + " 请求=======================>\n");
-        StringBuilder responseLog = new StringBuilder("<=======================收到" + urlLog + " 请求结果=======================>\n");
+        StringBuilder requestlog = new StringBuilder("<=======================发起 " + urlLog + " 请求=======================>\n");
+        StringBuilder responseLog = new StringBuilder("<=======================收到 " + urlLog + " 请求结果=======================>\n");
         RequestBody requestBody = request.body();
         Connection connection = chain.connection();
         requestlog.append(request.method()).append(' ').append(request.url())
@@ -131,18 +136,21 @@ public class LoggingInterceptor implements Interceptor {
             responseLog.append("------Headers------\n");
             for (int i = 0, count = headers.size(); i < count; i++) {
                 responseLog.append(headers.name(i)).append(" : ").append(headers.value(i)).append("\n");
-                if ("date".equals(headers.name(i).toLowerCase())) {
-                    responseLog.append("服务器时间").append(" : ").append(toGMT8(headers.value(i))).append("\n");
+                if ("date".equalsIgnoreCase(headers.name(i))) {
+                    long serviceTime = U_time.getLongFromTimeStr(U_time.EEE_time_Z, headers.value(i), Locale.ENGLISH);
+                    serviceTimeDiff = U_time.getNowTimeLong() - U_time.getLongFromTimeStr(U_time.EEE_time_Z, headers.value(i), Locale.ENGLISH);
+                    responseLog.append("服务器时间").append(" : ").append(U_time.convertLongToTime(serviceTime, U_time.yyyy_MM_ddHH_mm_ss)).append("\n");
                 }
-                if ("last-modified".equals(headers.name(i).toLowerCase())) {
-                    responseLog.append("最后更新时间").append(" : ").append(toGMT8(headers.value(i))).append("\n");
+                if ("last-modified".equalsIgnoreCase(headers.name(i))) {
+                    long serviceTime = U_time.getLongFromTimeStr(U_time.EEE_time_Z, headers.value(i), Locale.ENGLISH);
+                    responseLog.append("最后更新时间").append(" : ").append(U_time.convertLongToTime(serviceTime, U_time.yyyy_MM_ddHH_mm_ss)).append("\n");
                 }
             }
         }
         responseLog.append("------Body------\n");
         String isZip = headers.get("Content-Encoding");
         Buffer buffer = new Buffer();
-        if (isZip != null && "gzip".equals(isZip.toLowerCase())) {
+        if ("gzip".equalsIgnoreCase(isZip)) {
             new GzipSource(responseBuffer.clone()).read(buffer, responseBuffer.size() * 10);
         } else {
             buffer = responseBuffer;
@@ -150,6 +158,7 @@ public class LoggingInterceptor implements Interceptor {
         MediaType mediaType = responseBody.contentType();
         String charset = (mediaType != null && mediaType.charset() != null) ? mediaType.charset().name() : StandardCharsets.UTF_8.name();
         String content = decrypt(buffer.clone().readString(Charset.forName(charset)));
+        ViseLog.showInfo(urlLog.toString(), content);
         if (contentLength != 0 && contentLength < 20000) {
             printJson(content, responseLog);
         } else {
@@ -202,16 +211,6 @@ public class LoggingInterceptor implements Interceptor {
                     }
                 }
             }
-        }
-    }
-
-    private String toGMT8(String dateString) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE,dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(sdf.parse(dateString));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return "";
         }
     }
 

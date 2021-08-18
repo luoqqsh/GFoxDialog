@@ -17,11 +17,8 @@ public class DialogApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppInit.isDebug = true;
-        AppInit.initToast(this);
-        AppInit.initLog();
+        AppInit.init(this,true);
         AppInit.printInformation();
-        AppInit.setNeverCrash();
 //            x5Manager.getInstance().init(this);
 //            LiveEventBus.config().supportBroadcast(this);//跨进程通过广播
     }

@@ -45,7 +45,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="progressDialog"
-        android:text="进度弹窗" /> <Button
+        android:text="进度弹窗" />
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="fileDialog"

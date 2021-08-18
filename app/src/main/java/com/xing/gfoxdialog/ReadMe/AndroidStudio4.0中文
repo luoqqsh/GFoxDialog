@@ -1,5 +1,0 @@
-AndroidStudio4.0日志中文乱码问题
-打开AndroidStudio安装目录，找到bin下这两个文件studio64.exe.vmoptions
-
-最后一行添加 -Dfile.encoding=UTF-8
-保存，重启，ok

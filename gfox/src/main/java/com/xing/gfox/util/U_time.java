@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
+import java.util.TimeZone;
 
 
 public class U_time {
@@ -20,8 +21,9 @@ public class U_time {
     public static final String yyyyMMdd_HHmmss = "yyyyMMdd_HHmmss";
     public static final String yyyy_MM_dd = "yyyy-MM-dd";
     public static final String yyyyMMdd = "yyyyMMdd";
-    public static final String HHmmss = "HHmmss";
-    public static final String HH_mm_ss = "HH:mm:ss";
+    public static final String HHmmss = "HHmmss";//100000(10点)
+    public static final String HH_mm_ss = "HH:mm:ss";//10:00:00
+    public static final String EEE_time_Z = "EEE,dd MMM yyyy HH:mm:ss Z";
 
     /**
      * 时间戳格式化成指定格式
@@ -31,7 +33,12 @@ public class U_time {
      * @return 转换后的时间
      */
     public static String convertLongToTime(long time, String timeType) {
+        return convertLongToTime(time, timeType, "GMT+8");
+    }
+
+    public static String convertLongToTime(long time, String timeType, String timeZone) {
         SimpleDateFormat df = new SimpleDateFormat(timeType, Locale.CHINA);
+        df.setTimeZone(TimeZone.getTimeZone(timeZone));
         Date date = new Date(time);
         return df.format(date);
     }
@@ -47,13 +54,13 @@ public class U_time {
         if (time.length() == 8) { //时分秒格式00:00:00
             int index1 = time.indexOf(":");
             int index2 = time.indexOf(":", index1 + 1);
-            s = Integer.parseInt(time.substring(0, index1)) * 3600;//小时
-            s += Integer.parseInt(time.substring(index1 + 1, index2)) * 60;//分钟
+            s = Integer.parseInt(time.substring(0, index1)) * 3600L;//小时
+            s += Integer.parseInt(time.substring(index1 + 1, index2)) * 60L;//分钟
             s += Integer.parseInt(time.substring(index2 + 1));//秒
         }
         if (time.length() == 5) {//分秒格式00:00
             s = Integer.parseInt(time.substring(time.length() - 2)); //秒  后两位肯定是秒
-            s += Integer.parseInt(time.substring(0, 2)) * 60;    //分钟
+            s += Integer.parseInt(time.substring(0, 2)) * 60L;    //分钟
         }
         return s;
     }
@@ -72,25 +79,6 @@ public class U_time {
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat(timeType2, Locale.CHINA);
         Date dt = simpleDateFormat1.parse(time);
         return simpleDateFormat2.format(dt != null ? dt : "");
-    }
-
-    /**
-     * 将秒数转为xx小时xx分钟xx秒
-     *
-     * @param second 秒数
-     * @return 结果
-     */
-    public static String getFriendlyTime(int second) {
-        if (second > 3600) {
-            int hour = second / 3600;
-            int minute = (second % 3600) / 60;
-            return hour + "小时" + minute + "分钟";
-        }
-        if (second >= 60) {
-            int minute = second / 60;
-            return minute + "分钟";
-        }
-        return second + "秒";
     }
 
     /**
@@ -124,9 +112,13 @@ public class U_time {
      * @return 时间戳
      */
     public static long getLongFromTimeStr(String timeType, String timeStr) {
+        return getLongFromTimeStr(timeType, timeStr, Locale.CHINA);
+    }
+
+    public static long getLongFromTimeStr(String timeType, String timeStr, Locale locale) {
         if (TextUtils.isEmpty(timeStr)) return 0;
         try {
-            SimpleDateFormat df = new SimpleDateFormat(timeType, Locale.CHINA);
+            SimpleDateFormat df = new SimpleDateFormat(timeType, locale);
             Date parse = df.parse(timeStr);
             if (parse == null) return 0;
             return parse.getTime();

@@ -17,7 +17,7 @@ public abstract class BaseActivity extends HLBaseActivity {
 
     @Override
     protected int getBackgroundColorResource() {
-        return R.color.yellow;
+        return R.color.silver;
     }
 
     @Override

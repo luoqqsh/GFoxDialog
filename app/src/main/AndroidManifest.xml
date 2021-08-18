@@ -33,6 +33,7 @@
     <!--安卓9.0开始的前台服务权限-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!--获取网络状态、位置等信息-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -105,9 +106,6 @@
             android:screenOrientation="nosensor" />
         <activity
             android:name=".LogActivity"
-            android:screenOrientation="nosensor" />
-        <activity
-            android:name=".GLActivity"
             android:screenOrientation="nosensor" />
         <activity
             android:name=".DialogMainJavaActivity"

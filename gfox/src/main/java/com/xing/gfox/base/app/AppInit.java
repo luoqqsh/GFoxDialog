@@ -12,17 +12,18 @@ import android.widget.Toast;
 import com.xing.gfox.base.interfaces.HOnListener;
 import com.xing.gfox.base.toast.ToastInterceptor;
 import com.xing.gfox.base.toast.U_Toast;
+import com.xing.gfox.hardware.battery.BatteryChangedReceiver;
 import com.xing.gfox.hardware.lockScreen.ScreenBroadcastReceiver;
 import com.xing.gfox.hardware.netWork.NetWorkCallBack;
 import com.xing.gfox.hardware.netWork.NetworkStateReceive;
-import com.xing.gfox.hardware.netWork.ToolsNetState;
+import com.xing.gfox.hardware.netWork.U_wifi;
 import com.xing.gfox.log.ViseLog;
 import com.xing.gfox.log.inner.LogcatTree;
+import com.xing.gfox.util.U_device;
+import com.xing.gfox.util.U_language;
 import com.xing.gfox.util.U_screen;
 import com.xing.gfox.util.U_thread;
-
-import com.xing.gfox.hardware.battery.BatteryChangedReceiver;
-import com.xing.gfox.util.U_device;
+import com.xing.gfox.viewmodel.ExtKt;
 
 public class AppInit {
     @SuppressLint("StaticFieldLeak")
@@ -39,6 +40,19 @@ public class AppInit {
             ViseLog.e("context初始化异常");
         }
         return mContext.getApplicationContext();
+    }
+
+    //初始化所有
+    public static void init(Application application, boolean isDebug) {
+        AppInit.isDebug = isDebug;
+        AppInit.initToast(application);
+        AppInit.initLog();
+        setNeverCrash();
+        initMultiViewModel(application);
+    }
+
+    public static void initMultiViewModel(Application application) {
+        ExtKt.startMultiVM(application);
     }
 
     public static void initToast(Application application) {
@@ -86,8 +100,12 @@ public class AppInit {
             ScreenBroadcastReceiver.getInstance().register(context);
             NetworkStateReceive.getInstance().register(context);
             NetWorkCallBack.getInstance().registerNetworkCallback(context);
-            ToolsNetState.printWifiInfo(context);
+            U_wifi.printWifiInfo(context);
         }
+    }
+
+    public static void initLanguage(String language) {
+        U_language.appLanguage = language;
     }
 
     /**

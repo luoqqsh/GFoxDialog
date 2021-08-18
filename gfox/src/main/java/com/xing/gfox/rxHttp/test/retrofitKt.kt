@@ -1,7 +1,7 @@
 package com.xing.gfox.rxHttp.test
 
 import com.xing.gfox.log.ViseLog
-import com.xing.gfox.rxHttp.LoggingInterceptor
+import com.xing.gfox.rxHttp.interceptor.LoggingInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
